@@ -1,0 +1,19 @@
+includes:
+    - !include Canis.yaml
+Messages:
+  - Name: Dog
+    Description: Doggone it
+    Family: Families.Canidae
+    Genus: Genuses.Canis
+    Species: Species.Familaris
+    Fields:
+      - Name: FavoriteFood
+        Type: int8
+        Enum: Foods
+      - Name: Name
+        Type: uint8
+        Units: ASCII
+        Count: 16
+      - Name: FriendFamily
+        Type: uint8
+        Enum: Families
