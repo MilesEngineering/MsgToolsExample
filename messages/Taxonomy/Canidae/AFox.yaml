@@ -1,0 +1,17 @@
+includes:
+    - !include Vulpes.yaml
+    - !include Canidae.yaml
+Messages:
+  - Name: AFox
+    Description: Foxity fox fox
+    Family: Families.Canidae
+    Genus: Genuses.Vulpes
+    Species: Species.Lagopus
+    Fields:
+      - Name: FavoriteFood
+        Type: int8
+        Enum: Foods
+      - Name: Name
+        Type: uint8
+        Units: ASCII
+        Count: 16

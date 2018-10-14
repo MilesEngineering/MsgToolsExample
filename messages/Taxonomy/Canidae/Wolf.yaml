@@ -1,0 +1,13 @@
+includes:
+    - !include Canis.yaml
+Messages:
+  - Name: Wolf
+    Description: Howl.
+    Family: Families.Canidae
+    Genus: Genuses.Canis
+    Species: Species.Lupis
+    Fields:
+      - Name: Height
+        Type: uint8
+      - Name: Weight
+        Type: uint8
