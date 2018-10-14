@@ -3,32 +3,32 @@ all:: check cpp c dart python java js swift matlab html
 .PHONY: python cpp c java js swift matlab html check
 
 python:
-	msgparser messages obj/Python python
+	msgparser messages obj/CodeGenerator/Python python
 
 cpp:
-	msgparser messages obj/Cpp cpp
+	msgparser messages obj/CodeGenerator/Cpp cpp
 
 c:
-	msgparser messages obj/C c
+	msgparser messages obj/CodeGenerator/C c
 
 dart:
-	msgparser messages obj/Dart/lib dart
+	msgparser messages obj/CodeGenerator/Dart/lib dart
 
 java:
-	msgparser messages obj/Java java
+	msgparser messages obj/CodeGenerator/Java java
 
 js:
-	msgparser messages obj/Javascript javascript
+	msgparser messages obj/CodeGenerator/Javascript javascript
 
 swift:
-	msgparser messages obj/Swift swift
+	msgparser messages obj/CodeGenerator/Swift swift
 
 matlab:
-	msgparser messages obj/Matlab/+Messages matlab
+	msgparser messages obj/CodeGenerator/Matlab/+Messages matlab
 
 html:
-	msgparser messages obj/Html html
-	@find obj/Html -type d -print0 | xargs -n 1 -0 cp html/bootstrap.min.css
+	msgparser messages obj/CodeGenerator/Html html
+	@find obj/CodeGenerator/Html -type d -print0 | xargs -n 1 -0 cp html/bootstrap.min.css
 
 check: $(DIGEST)
 
