@@ -30,13 +30,16 @@ html:
 	msgparser messages obj/CodeGenerator/Html html
 	@find obj/CodeGenerator/Html -type d -print0 | xargs -n 1 -0 cp html/bootstrap.min.css
 
-check: $(DIGEST)
+check: obj/CodeGenerator/MsgDigest.txt
 
 clean clobber::
 	rm -rf obj
 
 MSG_FILES := $(shell cd messages && find * -iname \*.yaml)
 
-$(DIGEST): $(addprefix messages/,$(MSG_FILES)) $(CG_DIR)check.py
+obj/CodeGenerator/MsgDigest.txt: $(addprefix messages/,$(MSG_FILES))
 	$(call colorecho,Checking message validity)
-	msgcheck $(call CYGPATH,$(DIGEST)) messages
+	msgcheck $@ messages
+
+remove_timestamps:
+	find obj/CodeGenerator -type f | xargs sed -i -e 's/    Created.*//'
