@@ -26,6 +26,6 @@ Messages:
               NumBits: 24
               Units: ""
       - Name: Time
-        Type: uint32
-        Description: Rolling millisecond counter.
+        Type: float64
+        Description: Time since epoch
         Default: 0
