@@ -1,6 +1,6 @@
-all:: check cpp c dart python java js swift matlab html
+all:: check cpp c dart python java js kotlin swift matlab html
 
-.PHONY: python cpp c java js swift matlab html check
+.PHONY: python cpp c java js kotlin swift matlab html check
 
 python:
 	msgparser messages obj/CodeGenerator/Python python
@@ -19,6 +19,9 @@ java:
 
 js:
 	msgparser messages obj/CodeGenerator/Javascript javascript
+
+kotlin:
+	msgparser messages obj/CodeGenerator/Kotlin kotlin
 
 swift:
 	msgparser messages obj/CodeGenerator/Swift swift
@@ -40,3 +43,11 @@ MSG_FILES := $(shell cd messages && find * -iname \*.yaml)
 $(DIGEST): $(addprefix messages/,$(MSG_FILES)) $(CG_DIR)check.py
 	$(call colorecho,Checking message validity)
 	msgcheck $(call CYGPATH,$(DIGEST)) messages
+
+save_expected_results:
+	rm -rf expected/
+	mv obj/ expected/
+	find expected/ -type f | xargs sed -i -e 's/Created.*at.*from://'
+
+remove_timestamps:
+	find obj/ -type f | xargs sed -i -e 's/Created.*at.*from://'
