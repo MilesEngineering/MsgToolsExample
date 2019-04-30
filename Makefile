@@ -42,7 +42,7 @@ MSG_FILES := $(shell cd messages && find * -iname \*.yaml)
 
 obj/CodeGenerator/MsgDigest.txt: $(addprefix messages/,$(MSG_FILES))
 	$(call colorecho,Checking message validity)
-	msgcheck $(call CYGPATH,$(DIGEST)) messages
+	msgcheck $@ messages
 
 save_expected_results:
 	rm -rf expected/
