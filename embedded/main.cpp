@@ -38,6 +38,7 @@ class TestClient1 : public MessageClient
             TestCase1Message tc1;
             if(tc1.Exists())
             {
+                tc1.SetFieldA(xTaskGetTickCount());
                 cout << "TC1 sending MessageID " << tc1.GetMessageID() << " at time " << xTaskGetTickCount() << endl;
                 SendMessage(tc1);
             }
