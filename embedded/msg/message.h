@@ -20,12 +20,12 @@ class MessagePool;
 class MessageBuffer
 {
     public:
-        NetworkHeader   m_hdr;
         MessagePool*    m_owner;
 #ifdef MSG_REFERENCE_COUNTING
         std::atomic_int m_referenceCount;
 #endif
         uint16_t        m_bufferSize;
+        NetworkHeader   m_hdr;
         uint8_t         m_data[1];
 };
 
@@ -48,6 +48,8 @@ class Message
         void      SetDataLength(uint16_t len);
 		MessageIdType GetMessageID() const;
 		int       GetDataLength() const;
+        uint8_t*  GetDataPointer() const;
+        int       GetTotalLength() const;
 	protected:
 		MessageBuffer* m_buf;
         // auto-generated code wants 'm_data' to exist!

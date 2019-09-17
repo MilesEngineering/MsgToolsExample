@@ -105,6 +105,14 @@ int Message::GetDataLength() const
 {
     return m_buf->m_hdr.GetDataLength();
 }
+uint8_t* Message::GetDataPointer() const
+{
+    return m_buf->m_hdr.m_data;
+}
+int Message::GetTotalLength() const
+{
+    return sizeof(m_buf->m_hdr)+GetDataLength();
+}
 bool Message::Exists()
 {
     return m_buf != 0 && m_data != 0;
