@@ -9,14 +9,16 @@
 #include "TestCase1.h"
 #include "TestCase2.h"
 
+#ifdef BUILD_SPEC_Linux
 #include "network_client.h"
+#endif
 
 #include <iostream>
 using namespace std;
 
 // Make a pool of buffers to be used by all clients.
 #define POOL_BUF_LEN 128
-#define POOL_SIZE    3
+#define POOL_SIZE    8
 uint8_t buf[POOL_SIZE*POOL_BUF_LEN];
 MessagePool mp(buf, POOL_SIZE, POOL_BUF_LEN);
 
@@ -26,7 +28,7 @@ class TestClient1 : public MessageClient
 {
     public:
         TestClient1(MessagePool& pool)
-        : MessageClient("tc1", &pool, 1000)
+        : MessageClient("tc1", &pool, 100)
         {
             MessageBus::Subscribe(this, TestCase1Message::MSG_ID);
             MessageBus::Subscribe(this, TestCase2Message::MSG_ID);
@@ -82,7 +84,9 @@ int main (void)
 
     TestClient1 tc1(mp);
     TestClient2 tc2(mp);
+#ifdef BUILD_SPEC_Linux
     NetworkClient nc(mp);
+#endif
     vTaskStartScheduler();
     return 0;
 }

@@ -19,6 +19,7 @@ class NetworkClient : public MessageClient
           m_sock(0),
           m_port(port),
           m_gotHdr(false),
+          m_connectRetries(25),
           m_buf(0)
         {
             MessageBus::SubscribeAll(this);
@@ -37,20 +38,28 @@ class NetworkClient : public MessageClient
             
             if(inet_pton(AF_INET, "127.0.0.1", &serv_addr.sin_addr)<=0)
             {
+                printf("\ninet_pton Failed \n");
+                close(m_sock);
+                m_sock = 0;
                 return;
             }
             
             if (connect(m_sock, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0)
             {
                 printf("\nConnection Failed \n");
+                close(m_sock);
+                m_sock = 0;
                 return;
             }
-            ConnectMessage cm;
-            strcpy((char*)cm.Name(), "FreeRTOS");
-            SendSocketMsg(cm);
-            
-            MaskedSubscriptionMessage subscribeMsg;
-            SendSocketMsg(subscribeMsg);
+            {
+                ConnectMessage cm;
+                strcpy((char*)cm.Name(), "FreeRTOS");
+                SendSocketMsg(cm);
+            }
+            {
+                MaskedSubscriptionMessage subscribeMsg;
+                SendSocketMsg(subscribeMsg);
+            }
         }
         void HandleReceivedMessage(Message& msg)
         {
@@ -59,14 +68,18 @@ class NetworkClient : public MessageClient
         }
         void SendSocketMsg(Message& msg)
         {
-            send(m_sock, msg.GetDataPointer(), msg.GetTotalLength(), 0);
+            if(m_sock)
+                send(m_sock, msg.GetDataPointer(), msg.GetTotalLength(), 0);
         }
         void PeriodicTask()
         {
-            if(m_sock == 0)
+            if(m_sock == 0 && ++m_connectRetries > 25)
             {
+                m_connectRetries = 0;
                 OpenSocket();
             }
+            if(m_sock == 0)
+                return;
             // read from network!
             if(m_buf == 0)
             {
@@ -123,6 +136,7 @@ class NetworkClient : public MessageClient
         int m_sock;
         int m_port;
         bool m_gotHdr;
+        int m_connectRetries;
         MessageBuffer* m_buf;
 };
 

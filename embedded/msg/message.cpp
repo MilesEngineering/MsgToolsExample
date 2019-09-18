@@ -9,6 +9,27 @@
 #include <iostream>
 using namespace std;
 
+int MessageBuffer::increment_refcount()
+{
+#if defined(MSG_REFERENCE_COUNTING)
+    //cout << this << "++" << endl;
+    int ret = std::atomic_fetch_add(&m_referenceCount, 1);
+    configASSERT(ret > 0);
+    return ret;
+#else
+    return 0;
+#endif
+}
+int MessageBuffer::decrement_refcount()
+{
+#if defined(MSG_REFERENCE_COUNTING)
+    //cout << this << "--" << endl;
+    return std::atomic_fetch_sub(&m_referenceCount, 1);
+#else
+    return 0;
+#endif
+}
+
 Message::Message()
 : m_buf(nullptr),
   m_data(nullptr)
@@ -18,6 +39,8 @@ Message::Message(MessageBuffer* buf)
 : m_buf(buf),
   m_data(buf->m_data)
 {
+    //# can't increment here, we're inheriting a non-zero count from our caller (in MessageQueue::get() or MessagePool::Allocate())
+    //buf->increment_refcount();
 }
 Message::Message(int size)
 : m_buf(nullptr),
@@ -60,7 +83,7 @@ Message::Message(const Message &rhs)
 #ifdef MSG_REFERENCE_COUNTING
     m_buf = rhs.m_buf;
     m_data = rhs.m_data;
-    std::atomic_fetch_add(&rhs.m_buf->m_referenceCount, 1);
+    rhs.m_buf->increment_refcount();
 #else
     Allocate(rhs.GetDataLength());
     // copy the contents
