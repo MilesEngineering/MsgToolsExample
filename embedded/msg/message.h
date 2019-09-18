@@ -11,6 +11,9 @@
 #include <atomic>
 #endif
 
+#include <iostream>
+using namespace std;
+
 class MessagePool;
 
 // This holds the contents of a message, including:
@@ -20,8 +23,10 @@ class MessagePool;
 class MessageBuffer
 {
     public:
+        int increment_refcount();
+        int decrement_refcount();
+    public:
         MessagePool*    m_owner;
-        void*           m_sender;
 #ifdef MSG_REFERENCE_COUNTING
         std::atomic_int m_referenceCount;
 #endif
@@ -61,6 +66,7 @@ class Message
 		void operator=(Message& rhs);
     friend class MessageQueue;
     friend class MessageBus;
+    friend class MessageClient;
 };
 
 #endif

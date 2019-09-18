@@ -38,8 +38,6 @@ class MessageBus
             }
             //cout << "sub count = " << subcount << endl;
             
-            msg.m_buf->m_sender = sender;
-            
             // See who subscribed to it, and give it to them.
             int i=0;
             std::multimap<MessageIdType, MessageClient*>::iterator it;

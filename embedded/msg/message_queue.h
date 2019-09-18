@@ -12,7 +12,7 @@ class MessageQueue
     public:
         MessageQueue(int count=DEFAULT_QUEUE_LEN);
         MessageBuffer* get(TickType_t waitTime=0);
-        void put(Message& msg);
+        void put(MessageBuffer* msg);
     private:
         QueueHandle_t m_msgQueue;
 };
