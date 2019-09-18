@@ -3,18 +3,25 @@
 
 #include <sys/socket.h> 
 #include <arpa/inet.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <cstring>
+#include <signal.h>
+
+#include "Network/Connect.h"
+#include "Network/MaskedSubscription.h"
 
 class NetworkClient : public MessageClient
 {
     public:
         NetworkClient(MessagePool& pool, int port=5678)
-        : MessageClient("Network", &pool, 0, 0, 100),
+        : MessageClient("Network", &pool, 100),
           m_sock(0),
-          m_port(port)
+          m_port(port),
+          m_gotHdr(false),
+          m_buf(0)
         {
             MessageBus::SubscribeAll(this);
-            
-            OpenSocket();
         }
         void OpenSocket()
         {
@@ -38,19 +45,85 @@ class NetworkClient : public MessageClient
                 printf("\nConnection Failed \n");
                 return;
             }
+            ConnectMessage cm;
+            strcpy((char*)cm.Name(), "FreeRTOS");
+            SendSocketMsg(cm);
+            
+            MaskedSubscriptionMessage subscribeMsg;
+            SendSocketMsg(subscribeMsg);
         }
         void HandleReceivedMessage(Message& msg)
         {
             // send to network!
+            SendSocketMsg(msg);
+        }
+        void SendSocketMsg(Message& msg)
+        {
             send(m_sock, msg.GetDataPointer(), msg.GetTotalLength(), 0);
         }
         void PeriodicTask()
         {
+            if(m_sock == 0)
+            {
+                OpenSocket();
+            }
             // read from network!
+            if(m_buf == 0)
+            {
+                m_buf = GetMessagePool()->Allocate(0);
+                if(m_buf == 0)
+                    cout << "Alloc returned NULL!" << endl;
+            }
+            if(m_buf)
+            {
+                if(!m_gotHdr)
+                {
+                    int ret = recv(m_sock, &m_buf->m_hdr, sizeof(m_buf->m_hdr), MSG_DONTWAIT);
+                    if(errno != 11)
+                        printf("%d = recv(%d), errno = %d\n", ret, (int)sizeof(m_buf->m_hdr), errno);
+                    if(ret < 0)
+                    {
+                        return;
+                    }
+                    else if(ret == sizeof(m_buf->m_hdr))
+                    {
+                        //printf("    Got hdr for %d byte msg\n", m_buf->m_hdr.GetDataLength());
+                        m_gotHdr = true;
+                    }
+                    else
+                    {
+                        printf("    recv ret %d\n", ret);
+                    }
+                }
+                if(m_gotHdr)
+                {
+                    int len = m_buf->m_hdr.GetDataLength();
+                    if(len > m_buf->m_bufferSize)
+                    {
+                        printf("Error!  Received message too big for buffer!\n");
+                        return;
+                    }
+                    int ret = recv(m_sock, m_buf->m_data, len, MSG_DONTWAIT);
+                    if(ret < 0)
+                    {
+                        return;
+                    }
+                    else if(ret == len)
+                    {
+                        //printf("Got body\n");
+                        Message msg(m_buf);
+                        SendMessage(msg);
+                        m_buf = 0;
+                        m_gotHdr = false;
+                    }
+                }
+            }
         }
     private:
         int m_sock;
         int m_port;
+        bool m_gotHdr;
+        MessageBuffer* m_buf;
 };
 
 #endif

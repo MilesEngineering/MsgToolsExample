@@ -7,6 +7,7 @@
 #include "message_pool.h"
 #include "message_queue.h"
 #include "TestCase1.h"
+#include "TestCase2.h"
 
 #include "network_client.h"
 
@@ -27,10 +28,12 @@ class TestClient1 : public MessageClient
         TestClient1(MessagePool& pool)
         : MessageClient("tc1", &pool, 1000)
         {
+            MessageBus::Subscribe(this, TestCase1Message::MSG_ID);
+            MessageBus::Subscribe(this, TestCase2Message::MSG_ID);
         }
         void HandleReceivedMessage(Message& msg)
         {
-            UNUSED(msg);
+            cout << "  TC1 got " << msg.GetMessageID() << " at time " << xTaskGetTickCount() << endl;
         }
         void PeriodicTask()
         {
@@ -53,6 +56,7 @@ class TestClient2 : public MessageClient
         : MessageClient("tc2", &pool, 5000)
         {
             MessageBus::Subscribe(this, TestCase1Message::MSG_ID);
+            MessageBus::Subscribe(this, TestCase2Message::MSG_ID);
         }
         void HandleReceivedMessage(Message& msg)
         {
