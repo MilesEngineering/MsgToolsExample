@@ -21,6 +21,7 @@ class MessageBuffer
 {
     public:
         MessagePool*    m_owner;
+        void*           m_sender;
 #ifdef MSG_REFERENCE_COUNTING
         std::atomic_int m_referenceCount;
 #endif
@@ -59,6 +60,7 @@ class Message
 		//# people to copy messages with the assignment operator.
 		void operator=(Message& rhs);
     friend class MessageQueue;
+    friend class MessageBus;
 };
 
 #endif

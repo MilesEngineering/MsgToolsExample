@@ -29,13 +29,16 @@ class MessageBus
         {
             Instance()->m_subscriptions.insert(std::pair<MessageIdType, MessageClient*>(msgid, client));
         }
-        static void SendMessage(Message& msg)
+        static void SendMessage(Message& msg, void* sender)
         {
             int subcount = Instance()->m_subscriptions.count(msg.GetMessageID()) + Instance()->m_greedyClients.size();
             if(subcount == 0)
             {
                 return;
             }
+            //cout << "sub count = " << subcount << endl;
+            
+            msg.m_buf->m_sender = sender;
             
             // See who subscribed to it, and give it to them.
             int i=0;
@@ -44,13 +47,15 @@ class MessageBus
             {
                 //MessageIdType id = (*it).first;
                 MessageClient* c = (*it).second;
-                DeliverToClient(c, msg, i == subcount);
+                if(sender != c)
+                    DeliverToClient(c, msg, i == subcount);
                 i++;
             }
             for (auto it = Instance()->m_greedyClients.begin(); it != Instance()->m_greedyClients.end(); ++it)
             {
                 MessageClient* c = *it;
-                DeliverToClient(c, msg, i == subcount);
+                if(sender != c)
+                    DeliverToClient(c, msg, i == subcount);
                 i++;
             }
         }

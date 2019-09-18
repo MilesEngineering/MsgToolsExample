@@ -52,7 +52,7 @@ void MessageClient::RunLoop()
 }
 void MessageClient::SendMessage(Message& msg)
 {
-    MessageBus::SendMessage(msg);
+    MessageBus::SendMessage(msg, this);
 }
 MessageClient* MessageClient::CurrentClient()
 {
