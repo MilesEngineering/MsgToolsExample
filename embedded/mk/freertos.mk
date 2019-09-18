@@ -1,27 +1,24 @@
-OBJ_DIR := obj
+include mk/include.mk
+
 TARGET := $(OBJ_DIR)/$(TARGET)
 
-all: ${TARGET}
-
-.PHONY : all clean clobber
-
-PLATFORM ?= Linux
+all:: ${TARGET}
 
 MSG_SRC_DIR=msg
 MSG_INC_DIR=msg
 FREERTOS_SRC_DIR=FreeRTOS/Source
 FREERTOS_INC_DIR=FreeRTOS/Source/include
-PORTABLE_SRC_DIR=FreeRTOS/Source/portable/GCC/${PLATFORM}
-PORTABLE_INC_DIR=FreeRTOS/Source/portable/GCC/${PLATFORM}
+PORTABLE_SRC_DIR=FreeRTOS/Source/portable/GCC/${BUILD_SPEC}
+PORTABLE_INC_DIR=FreeRTOS/Source/portable/GCC/${BUILD_SPEC}
 PORTABLE_SRC_MEM_MANG_DIR=FreeRTOS/Source/portable/MemMang
 MSGTOOLS_CODEGEN_DIR=../obj/CodeGenerator/Cpp/
 
-FLAGS = -Wall -Werror -Wextra -Wpedantic -O0 -g -MMD
+FLAGS = -Wall -Werror -Wextra -Wpedantic -O0 -g -MMD -DBUILD_SPEC_$(subst /,_,$(BUILD_SPEC))=1
 CFLAGS += ${FLAGS}
 CXXFLAGS += ${FLAGS}
 LDFLAGS += ${FLAGS}
 
-ifneq (,$(findstring Linux,$(PLATFORM)))
+ifneq (,$(findstring Linux,$(BUILD_SPEC)))
 # only want -pthread for linux!
 LDFLAGS += -pthread
 else
@@ -53,14 +50,11 @@ $(OBJ_DIR)/%.o: %.c | $(OBJ_DIR)
 $(TARGET): ${OBJS}
 	${CXX} ${LDFLAGS} ${LD_EXE_FLAGS} -o $@ ${OBJS} ${LIBS} 
 
-clean:
+clean::
 	-rm -f $(OBJ_DIR)/*.o $(OBJ_DIR)/*.d
 	-rm -f ${TARGET}
 
-clobber:
+clobber::
 	-rm -rf $(OBJ_DIR)
-
-$(OBJ_DIR):
-	mkdir -p $(OBJ_DIR)
 
 -include $(OBJS:%.o=%.d)
