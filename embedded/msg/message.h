@@ -2,6 +2,7 @@
 #define MESSAGE_H
 
 #define MessageIdType uint32_t
+#define TimeType      uint32_t
 
 #include "headers/NetworkHeader.h"
 //#include "MsgInfo.h"
@@ -52,6 +53,7 @@ class Message
 		bool Exists();
         void      SetMessageID(MessageIdType id);
         void      SetDataLength(uint16_t len);
+        void      SetTime(TimeType time);
 		MessageIdType GetMessageID() const;
 		int       GetDataLength() const;
         uint8_t*  GetDataPointer() const;
