@@ -47,9 +47,11 @@ Message::Message(int size)
   m_data(nullptr)
 {
     Allocate(size);
+    InitializeTime();
 }
 void Message::InitializeTime()
 {
+    SetTime(xTaskGetTickCount());
 }
 bool Message::Allocate(int size)
 {
@@ -119,6 +121,10 @@ void Message::SetMessageID(MessageIdType id)
 void Message::SetDataLength(uint16_t len)
 {
     m_buf->m_hdr.SetDataLength(len);
+}
+void Message::SetTime(TimeType time)
+{
+    m_buf->m_hdr.SetTime(time*0.001);
 }
 MessageIdType Message::GetMessageID() const
 {
