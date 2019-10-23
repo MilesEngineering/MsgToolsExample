@@ -1,0 +1,3 @@
+[submodule "html/msgtools"]
+	path = html/msgtools
+	url = git@github.com:MilesEngineering/MsgToolsJS.git
