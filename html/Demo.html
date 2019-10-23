@@ -16,9 +16,20 @@
         msgtools.load('../obj/CodeGenerator/Javascript/', ['TextCommand', 'TestCase3', 'BandwidthTest', 'TextResponse', 'TestCase4', 'Printf', 'TestCase1', 'TestCase2', 'Taxonomy.Canidae.Wolf', 'Taxonomy.Canidae.Canis', 'Taxonomy.Canidae.Vulpes', 'Taxonomy.Canidae.Dog', 'Taxonomy.Canidae.AFox', 'Taxonomy.Canidae.Fox', 'Taxonomy.Canidae.Canidae'])
             .then(() => {connectToServer()})
     </script>
+    <link type="text/css" rel="stylesheet" href="./bootstrap.min.css" />
 </head>
 <body>
-    <msgtools-tabs tabNames="Rx dropdown,Tx dropdown,Rx Tree,Tx Tree,Plot">
+    <div class="container-fluid" style="background: #ccc; padding: 30px 15px;">
+        <div class="container">
+            <nav>
+                <a href="#0" class="btn btn-primary">
+                    Add new +
+                </a>
+
+            </nav>
+        </div>
+    </div>
+    <div class="container">
         <div>
             <msgtools-msgselector handler=msgtools-msgrx></msgtools-msgselector>
         </div>
@@ -34,7 +45,7 @@
         <div>
             <msgtools-msgselector handler=msgtools-msgplot></msgtools-msgselector>
         </div>
-    </msgtools-tabs>
+    </div>
 </body>
 <script type='text/javascript'>
     //console.log("simple.html after body")
