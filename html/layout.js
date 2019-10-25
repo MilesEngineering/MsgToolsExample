@@ -60,7 +60,6 @@ msgLayout.registerComponent( 'msgTree', function( container, state ){
 msgLayout.on( 'stateChanged', function(){
     var state = JSON.stringify( msgLayout.toConfig() );
     localStorage.setItem( 'savedState', state );
-    console.log(state);
 });
 
 //initializing our layout
