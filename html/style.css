@@ -1,28 +1,24 @@
-@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,600&display=swap');
+/* @import url('https://fonts.googleapis.com/css?family=Open+Sans:400,600&display=swap');
 
 :root {
-   --color-dark: #17223b;
+   --color-dark: black;
    --color-dark-contrast: #263859;
    --color-dark-contrast-2: #1e2d47;
    --color-light-contrast: #6b778d;
    --color-alert: #ff6768;
-   --color-text: #FCFCFD;
-
+   --color-text: white;
    --main-font: 'Open Sans', 'Roboto', 'Verdana', sans-serif;
    --main-font-weight: 600;
    --base-font-size: 16px;
    --lg-font-size: 18px;
    --header-font-size: 46px;
    --header-text-letter-spacing: .045em;
-
    --border: 1px solid var(--color-text);
-
    --btn-radius: 4px;
  }
 
 html {
   background-color: var(--color-dark, white);
-  max-width: 1200px;
   width: 100%;
   margin: 0;
   font-size: var(--base-font-size, 18px);
@@ -62,18 +58,18 @@ h1, h2, h3, h4 {
 
 msgtools-msgselector {
   --tab-color: var(--color-text);
-  --tab-background-color: var(--color-dark-contrast-2);
-  --tab-button-border: #263859;
+  /* --tab-background-color: var(--color-dark-contrast-2); */
+  /* --tab-button-border: #263859; */
   --tab-button-padding: 20px 30px 15px;
   --tab-button-padding-hover: 11px 30px 15px;
   --tab-button-transition: all .2s;
-  --tab-background-hover: var(--color-dark-contrast);
+  /* --tab-background-hover: var(--color-dark-contrast); */
   --tab-padding: 40px 0 0;
-  --tab-button-border-bottom: var(--color-dark-contrast-2);
+  /* --tab-button-border-bottom: var(--color-dark-contrast-2); */
   --tab-button-border-hover: 5px solid var(--color-alert);
   --wrapper-padding: 50px 30px;
   --wrapper-border: none;
-  
+
   /* msg-selector wrapper */
   --msg-selector-margin-top: 30px;
   --msg-selector-display: block;
@@ -81,4 +77,4 @@ msgtools-msgselector {
   /* message display td */
   --selector-display-padding:;
   --selector-display-width:;
-}
+} */
