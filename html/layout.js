@@ -1,5 +1,3 @@
-
-
 // base configuration for golden layout
 var config = {
     content: [{
@@ -8,7 +6,6 @@ var config = {
                 type: 'component',
                 componentName: 'msgComponent',
                 componentState: {
-                    filter: 'Tlm',
                     handler: 'msgtools-msgrx'
                 },
             },
@@ -16,8 +13,7 @@ var config = {
                 type: 'component',
                 componentName: 'msgComponent',
                 componentState: {
-                    filter: 'Cmd',
-                    handler: 'msgtools-msgtx'
+                    handler: 'msgtools-msgrx'
                 },
             }]
         }]
@@ -30,11 +26,9 @@ var msgLayout = new window.GoldenLayout(config, $('#layout_container'));
 
 // Registering components for golden layout
 msgLayout.registerComponent( 'msgComponent', function( container, state ){
-    container.getElement().html('<div><msgtools-msgselector filter='
-                                + state.filter
-                                +  ' handler='
+    container.getElement().html('<div><msgtools-msgselector handler="'
                                 + state.handler
-                                + '></msgtools-msgselector></div>');
+                                + '"></msgtools-msgselector></div>');
 });
 
 
