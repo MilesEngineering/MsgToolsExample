@@ -4,8 +4,10 @@
     <script type='text/javascript'>
         //console.log("simple.html head")
     </script>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script type="text/javascript" src="./goldenlayout/goldenlayout.min.js"></script>
     <script type="text/javascript" src="msgtools/msgtools.js" ></script>
-    <script type="text/javascript" src="msgtools/d3.v3.min.js" ></script>
+    <!-- <script type="text/javascript" src="msgtools/d3.v3.min.js" ></script> -->
     <script type='text/javascript'>
         function connectToServer() {
             var client = new msgtools.MessageClient('WebGuiDemo');
@@ -17,39 +19,30 @@
             .then(() => {connectToServer()})
     </script>
     <link type="text/css" rel="stylesheet" href="./bootstrap.min.css" />
+    <link type="text/css" rel="stylesheet" href="./goldenlayout/goldenlayout-base.css" />
+    <link type="text/css" rel="stylesheet" href="./goldenlayout/goldenlayout-dark-theme.css" />
 </head>
 <body>
-    <div class="container-fluid" style="background: #ccc; padding: 30px 15px;">
+    <div class="container-fluid" style="background: #ccc; padding: 15px;">
         <div class="container">
             <nav>
                 <a href="#0" class="btn btn-primary">
                     Add new +
                 </a>
-
             </nav>
         </div>
     </div>
-    <div class="container">
-        <div>
-            <msgtools-msgselector handler=msgtools-msgrx></msgtools-msgselector>
+    <div class="container-fluid">
+        <div class="">
+            <msgtools-msgselector filter="Cmd" handler="msgtools-msgrx"></msgtools-msgselector>
         </div>
-        <div>
-            <msgtools-msgselector handler=msgtools-msgtx></msgtools-msgselector>
+
+        <div class="row" id="layout_container" style="min-height: 700px;">
+            <!-- Golden Layout attaches here -->
         </div>
-        <div>
-            <msgtools-msgtree displayDepth=2 handler=msgtools-msgrx></msgtools-msgtree>
-        </div>
-        <div>
-            <msgtools-msgtree handler=msgtools-msgtx></msgtools-msgtree>
-        </div>
-        <div>
-            <msgtools-msgselector handler=msgtools-msgplot></msgtools-msgselector>
-        </div>
+
     </div>
 </body>
-<script type='text/javascript'>
-    //console.log("simple.html after body")
-</script>
 
 <script type="text/javascript" src="msgtools/MsgFieldLabel.js" ></script>
 <script type="text/javascript" src="msgtools/MsgTree.js" ></script>
@@ -58,4 +51,5 @@
 <script type="text/javascript" src="msgtools/MsgTabs.js" ></script>
 <script type="text/javascript" src="msgtools/Plot-component.js" ></script>
 <script type="text/javascript" src="msgtools/MsgPlot.js" ></script>
+<!-- <script type="text/javascript" src="./layout.js" ></script> -->
 </html>
