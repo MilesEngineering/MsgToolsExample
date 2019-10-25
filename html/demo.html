@@ -3,17 +3,22 @@
         <meta charset="utf-8"/>
         <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
         <script type="text/javascript" src="./goldenlayout/goldenlayout.min.js"></script>
-        <script type="text/javascript" src="msgtools/msgtools.js" ></script>
+        <script type="text/javascript" src="msgtools/msgtools.js"></script>
+        <link type="text/css" rel="stylesheet" href="./bootstrap.min.css" />
         <link type="text/css" rel="stylesheet" href="./goldenlayout/goldenlayout-base.css" />
-        <link type="text/css" rel="stylesheet" href="./goldenlayout/goldenlayout-dark-theme.css" />
+        <link type="text/css" rel="stylesheet" href="./goldenlayout/goldenlayout-light-theme.css" />
         <link type="text/css" rel="stylesheet" href="./style.css" />
     </head>
     <body>
-        <div id="layout_container" style="height: 400px;">
+        <div class="container-fluid">
+            <div class="row">
+                <div id="layout_container" style="height: 100%;"></div>
+            </div>
         </div>
-        <div>
+
+        <!-- <div>
             <msgtools-msgselector handler="msgtools-msgrx"></msgtools-msgselector>
-        </div>
+        </div> -->
 
     </body>
     <script type="text/javascript" src="./layout.js"></script>

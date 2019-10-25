@@ -2,22 +2,25 @@
 var config = {
     content: [{
         type: 'row',
-        content: [{
+        content:[{
+            type: 'component',
+            componentName: 'msgComponent',
+            componentState: { handler: 'msgtools-msgtx' }
+        },{
+            type: 'column',
+            content:[{
                 type: 'component',
                 componentName: 'msgComponent',
-                componentState: {
-                    handler: 'msgtools-msgrx'
-                },
-            },
-            {
+                componentState: { handler: 'msgtools-msgrx' }
+            },{
                 type: 'component',
                 componentName: 'msgComponent',
-                componentState: {
-                    handler: 'msgtools-msgrx'
-                },
+                componentState: { handler: 'msgtools-msgrx' }
             }]
         }]
-    };
+    }]
+};
+
 
 // Sets a new Golden Layout instance, using config and attaching to the target container
 // config argumnet is required. if no target is provided, golden layout
