@@ -40,7 +40,7 @@ h1, h2, h3, h4 {
   width: 130px;
   height: 130px;
   /* border-radius: 100%; */
-  background: var(--color-text);
+  /* background: var(--color-text);
 }
 
 .logo-wrapper img {
@@ -60,21 +60,26 @@ msgtools-msgselector {
   --tab-color: var(--color-text);
   /* --tab-background-color: var(--color-dark-contrast-2); */
   /* --tab-button-border: #263859; */
-  --tab-button-padding: 20px 30px 15px;
+  /* --tab-button-padding: 20px 30px 15px;
   --tab-button-padding-hover: 11px 30px 15px;
-  --tab-button-transition: all .2s;
+  --tab-button-transition: all .2s; */
   /* --tab-background-hover: var(--color-dark-contrast); */
-  --tab-padding: 40px 0 0;
+  /* --tab-padding: 40px 0 0; */
   /* --tab-button-border-bottom: var(--color-dark-contrast-2); */
-  --tab-button-border-hover: 5px solid var(--color-alert);
+  /* --tab-button-border-hover: 5px solid var(--color-alert);
   --wrapper-padding: 50px 30px;
-  --wrapper-border: none;
+  --wrapper-border: none; */
 
   /* msg-selector wrapper */
-  --msg-selector-margin-top: 30px;
-  --msg-selector-display: block;
+  /* --msg-selector-margin-top: 30px;
+  --msg-selector-display: block; */
 
   /* message display td */
-  --selector-display-padding:;
+  /* --selector-display-padding:;
   --selector-display-width:;
 } */
+
+body .lm_content{
+  overflow: scroll;
+  padding: 15px;
+}
