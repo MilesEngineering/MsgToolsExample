@@ -28,11 +28,6 @@ msgLayout.registerComponent( 'msgSelector', function( container, state ){
                                 + '"></msgtools-msgselector></div>');
 });
 
-msgLayout.registerComponent( 'msgTree', function( container, state ){
-    container.getElement().html('<div><msgtools-msgtree handler='
-                                + state.handler
-                                + '></msgtools-msgtree></div>');
-});
 // END registering components
 
 function saveState(reload) {
@@ -81,7 +76,7 @@ msgLayout.init();
 
 
 // Add Buttons
-function addMenuItem( container, text, componentType, handler ) {
+function addMenuItem( container, text, title, componentType, handler ) {
 
     const element = $( '<button class="btn btn-success" style="margin: 0 5px;">' + text + '</button>' );
 
@@ -90,6 +85,7 @@ function addMenuItem( container, text, componentType, handler ) {
     var newItemConfig = {
         type: 'component',
         componentName: componentType,
+        title: title,
         componentState: { handler: handler }
     };
 
@@ -101,10 +97,9 @@ function createMenu(container){
     const directions = '<span style="display: inline-block; font-size 1.5em;">Drag items to add: </span>';
     menu.append(directions);
 
-    addMenuItem( container, 'Add msgSelector receive', 'msgSelector', 'msgtools-msgrx' );
-    addMenuItem( container, 'Add msgTree receive', 'msgTree', 'msgtools-msgrx' );
-    addMenuItem( container, 'Add msgSelector transmit', 'msgSelector', 'msgtools-msgtx' );
-    addMenuItem( container, 'Add msgTree transmit', 'msgTree', 'msgtools-msgtx' );
+    addMenuItem( container, '+ View a message', 'Message Viewer', 'msgSelector', 'msgtools-msgrx' );
+    addMenuItem( container, '+ Transmit message', 'Message Sender', 'msgSelector', 'msgtools-msgtx' );
+    addMenuItem( container, '+ Plot a message', 'Message Plot', 'msgSelector', 'msgtools-msgplot' );
 }
 
 // Only include the add buttons if the layout is unlocked
