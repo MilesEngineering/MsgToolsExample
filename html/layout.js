@@ -3,25 +3,7 @@ let config = {
     settings: {
         reorderEnabled: true,
     },
-    content: [{
-        type: 'row',
-        content:[{
-            type: 'component',
-            componentName: 'msgSelector',
-            componentState: { handler: 'msgtools-msgtx', filter: 'tlm'}
-        },{
-            type: 'column',
-            content:[{
-                type: 'component',
-                componentName: 'msgSelector',
-                componentState: { handler: 'msgtools-msgrx'}
-            },{
-                type: 'component',
-                componentName: 'msgTree',
-                componentState: { handler: 'msgtools-msgrx'}
-            }]
-        }]
-    }]
+    content: [] // users can start building out their own layout immediately
 };
 
 // Sets a new Golden Layout instance, using config and attaching to the target container
@@ -32,12 +14,8 @@ let savedState = localStorage.getItem( 'savedState' ); // check local storage an
 let editState = localStorage.getItem( 'editState' ); // check local storage and use saved state if it exists
 
 
-if( savedState !== null ) {
-    if (savedState === 'undefined') {
-        msgLayout = new window.GoldenLayout( config, $('#layout_container'));
-    } else {
-        msgLayout = new GoldenLayout( JSON.parse( savedState ), $('#layout_container') );
-    }
+if( savedState !== null && savedState !== 'undefined' ) {
+    msgLayout = new GoldenLayout( JSON.parse( savedState ), $('#layout_container') );
 } else {
     msgLayout = new window.GoldenLayout( config, $('#layout_container'));
 }
@@ -45,17 +23,13 @@ if( savedState !== null ) {
 
 // Registering components for golden layout
 msgLayout.registerComponent( 'msgSelector', function( container, state ){
-    container.getElement().html('<div><h3>Type: '
-                                + state.handler
-                                + '</h3><msgtools-msgselector handler="'
+    container.getElement().html('<div><msgtools-msgselector handler="'
                                 + state.handler
                                 + '"></msgtools-msgselector></div>');
 });
 
 msgLayout.registerComponent( 'msgTree', function( container, state ){
-    container.getElement().html('<div><h3>Type: '
-                                + state.handler
-                                + '</h3><msgtools-msgtree handler='
+    container.getElement().html('<div><msgtools-msgtree handler='
                                 + state.handler
                                 + '></msgtools-msgtree></div>');
 });
