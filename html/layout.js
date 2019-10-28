@@ -84,12 +84,22 @@ msgLayout.init();
         element.html('Unlock');
     }
 
+    // Any configs that we want to disable when screen is locked
+    let lockableConfigs = ['reorderEnabled', 'showPopoutIcon', 'showCloseIcon'];
+
     element.click(function(){
         if(msgLayout.config.settings.reorderEnabled === true){
-            msgLayout.config.settings.reorderEnabled = false;
+            for(let key in msgLayout.config.settings){
+                if(lockableConfigs.includes(key)){
+                    msgLayout.config.settings[key] = false;
+                }
+            }
         } else {
-            msgLayout.config.settings.reorderEnabled = true;
-
+            for(let key in msgLayout.config.settings){
+                if(lockableConfigs.includes(key)){
+                    msgLayout.config.settings[key] = true;
+                }
+            }
         }
         saveState(true);
     });
