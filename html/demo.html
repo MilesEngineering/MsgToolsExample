@@ -13,8 +13,8 @@
         <div class="container-fluid">
             <div class="row">
                 <nav style="margin: 15px 0;">
-                    <div class="container-fluid" id="menuContainer">
-                        <span style="display: inline-block; font-size 1.5em;">Drag an item into the layout: </span>
+                    <div class="container-fluid" id="menu_container">
+                        <button type="button" name="button" class="btn btn-warning pull-right" id="lock_btn">Lock</button>
                     </div>
                 </nav>
             </div>
@@ -35,6 +35,7 @@
             var client = new msgtools.MessageClient('WebGuiDemo');
             var options = new Map();
             options.set('server', location.hostname);
+            // commenting out for development, uncomment to connect
             client.connect(options);
         }
         msgtools.load('../obj/CodeGenerator/Javascript/',

@@ -1,5 +1,8 @@
 // base configuration for golden layout
-var config = {
+let config = {
+    settings: {
+        reorderEnabled: true,
+    },
     content: [{
         type: 'row',
         content:[{
@@ -24,8 +27,10 @@ var config = {
 // Sets a new Golden Layout instance, using config and attaching to the target container
 // config argumnet is required. if no target is provided, golden layout
 // will take over the document.body
-var msgLayout,
-    savedState = localStorage.getItem( 'savedState' ); // check local storage and use saved state if it exists
+let msgLayout;
+let savedState = localStorage.getItem( 'savedState' ); // check local storage and use saved state if it exists
+let editState = localStorage.getItem( 'editState' ); // check local storage and use saved state if it exists
+
 
 if( savedState !== null ) {
     if (savedState === 'undefined') {
@@ -56,21 +61,47 @@ msgLayout.registerComponent( 'msgTree', function( container, state ){
 });
 // END registering components
 
+function saveState(reload) {
+    const state = JSON.stringify( msgLayout.toConfig() );
+    localStorage.setItem( 'savedState', state );
+    if(reload){
+        location.reload();
+    }
+}
+
 // Store state in local storage
 msgLayout.on( 'stateChanged', function(){
-    var state = JSON.stringify( msgLayout.toConfig() );
-    localStorage.setItem( 'savedState', state );
+    saveState(false);
 });
 
 //initializing our layout
 msgLayout.init();
 
+// lock/unlock button
+(function layoutLock() {
+    let element = $('#lock_btn');
+    if(msgLayout.config.settings.reorderEnabled === false){
+        element.html('Unlock');
+    }
+
+    element.click(function(){
+        if(msgLayout.config.settings.reorderEnabled === true){
+            msgLayout.config.settings.reorderEnabled = false;
+        } else {
+            msgLayout.config.settings.reorderEnabled = true;
+
+        }
+        saveState(true);
+    });
+}());
+
+
 // Add Buttons
-function addMenuItem( text, componentType, handler ) {
+function addMenuItem( container, text, componentType, handler ) {
 
-    var element = $( '<button>' + text + '</button>' );
+    const element = $( '<button class="btn btn-success" style="margin: 0 5px;">' + text + '</button>' );
 
-    $( '#menuContainer' ).append( element );
+    $( container ).append( element );
 
     var newItemConfig = {
         type: 'component',
@@ -81,7 +112,18 @@ function addMenuItem( text, componentType, handler ) {
     msgLayout.createDragSource( element, newItemConfig );
 };
 
-addMenuItem( 'Add msgSelector receive', 'msgSelector', 'msgtools-msgrx' );
-addMenuItem( 'Add msgTree receive', 'msgTree', 'msgtools-msgrx' );
-addMenuItem( 'Add msgSelector transmit', 'msgSelector', 'msgtools-msgtx' );
-addMenuItem( 'Add msgTree transmit', 'msgTree', 'msgtools-msgtx' );
+function createMenu(container){
+    const menu = $(container);
+    const directions = '<span style="display: inline-block; font-size 1.5em;">Drag items to add: </span>';
+    menu.append(directions);
+
+    addMenuItem( container, 'Add msgSelector receive', 'msgSelector', 'msgtools-msgrx' );
+    addMenuItem( container, 'Add msgTree receive', 'msgTree', 'msgtools-msgrx' );
+    addMenuItem( container, 'Add msgSelector transmit', 'msgSelector', 'msgtools-msgtx' );
+    addMenuItem( container, 'Add msgTree transmit', 'msgTree', 'msgtools-msgtx' );
+}
+
+// Only include the add buttons if the layout is unlocked
+if(msgLayout.config.settings.reorderEnabled == true ){
+    createMenu('#menu_container');
+}
