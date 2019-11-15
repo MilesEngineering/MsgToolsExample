@@ -141,5 +141,7 @@ if(msgLayout.config.settings.reorderEnabled == true ){
 }
 
 $(window).resize(function () {
-msgLayout.updateSize();
+    let height = $('#layout_container').height();
+    let width = $('#layout_container').width();
+    msgLayout.updateSize(width, height);
 });

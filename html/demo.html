@@ -11,8 +11,8 @@
         <link type="text/css" rel="stylesheet" href="./style.css" />
     </head>
     <body>
-        <div style="display: flex; flex-flow: column; height: 100%;">
-            <div style="flex: 0 1 auto;">
+        <div class="container-fluid">
+            <div class="row">
                 <nav style="margin: 15px 0;">
                     <div id="menu_container">
                         <button type="button" name="button" class="btn btn-warning pull-right" id="lock_btn" style="margin-left: 15px;">Lock</button>
@@ -20,7 +20,9 @@
                     </div>
                 </nav>
             </div>
-            <div id="layout_container" style="flex: 1 1 auto;">
+            <div class="row">
+                <div id="layout_container" style="height:100%;">
+                </div>
             </div>
         </div>
     </body>
