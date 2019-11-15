@@ -6,30 +6,48 @@ let config = {
     content: [] // users can start building out their own layout immediately
 };
 
-// Sets a new Golden Layout instance, using config and attaching to the target container
-// config argumnet is required. if no target is provided, golden layout
-// will take over the document.body
+
+//User can save their layout to local storage
 let msgLayout;
 let savedState = localStorage.getItem( 'savedState' ); // check local storage and use saved state if it exists
 let editState = localStorage.getItem( 'editState' ); // check local storage and use saved state if it exists
 
-
+// Sets a new Golden Layout instance, using config and attaching to the target container
+// config argument is required. if no target is provided, golden layout
+// will take over the document.body
 if( savedState !== null && savedState !== 'undefined' ) {
     msgLayout = new GoldenLayout( JSON.parse( savedState ), $('#layout_container') );
 } else {
     msgLayout = new window.GoldenLayout( config, $('#layout_container'));
 }
 
+// Golden Layout needs a component variable
+var msgSelectorComponent = function( container, state ) {
 
-// Registering components for golden layout
-msgLayout.registerComponent( 'msgSelector', function( container, state ){
-    container.getElement().html('<div><msgtools-msgselector handler="'
-                                + state.handler
-                                + '"></msgtools-msgselector></div>');
-});
+    //check for local storage and
+    if( !typeof window.localStorage ) {
+        container.getElement()
+                 .append('<h2 class="err">Your browser doesn\'t support \
+                 local storage, which is necessary to save your changes.</h2>');
+        return;
+    }
 
-// END registering components
+    let componentObj = new MsgSelector(handler = state.handler, selection = state.selection);
+    container.getElement().append(componentObj);
 
+    componentObj.addEventListener('settingsChanged', function(e){
+        container.setState({
+            handler: state.handler,
+            selection: e.detail
+        })
+    })
+}
+
+// Register components with golden layout
+msgLayout.registerComponent( 'msgSelector', msgSelectorComponent);
+// END register components
+
+// Save to local storage, called by layout change and save button
 function saveState(reload) {
     const state = JSON.stringify( msgLayout.toConfig() );
     localStorage.setItem( 'savedState', state );
@@ -38,13 +56,18 @@ function saveState(reload) {
     }
 }
 
-// Store state in local storage
-msgLayout.on( 'stateChanged', function(){
-    saveState(false);
-});
-
 //initializing our layout
 msgLayout.init();
+
+// save state button
+(function saveButton() {
+    let element = $('#save_btn');
+
+    element.click(function(e){
+        e.preventDefault();
+        saveState(false);
+    });
+}());
 
 // lock/unlock button
 (function layoutLock() {
@@ -76,17 +99,22 @@ msgLayout.init();
 
 
 // Add Buttons
-function addMenuItem( container, text, title, componentType, handler ) {
-
+function addMenuItem( container, text, title, componentType, handler, selection ) {
+    // if(typeof(selection) === 'undefined' || selection === '') {
+    //     let selection = 'fsw.msp.hawk.TlmAck';
+    // }
     const element = $( '<button class="btn btn-success" style="margin: 0 5px;">' + text + '</button>' );
 
     $( container ).append( element );
 
-    var newItemConfig = {
+    const newItemConfig = {
         type: 'component',
         componentName: componentType,
         title: title,
-        componentState: { handler: handler }
+        componentState: {
+            handler: handler,
+            selection: selection
+        }
     };
 
     msgLayout.createDragSource( element, newItemConfig );
@@ -97,9 +125,9 @@ function createMenu(container){
     const directions = '<span style="display: inline-block; font-size 1.5em;">Drag items to add: </span>';
     menu.append(directions);
 
-    addMenuItem( container, '+ View a message', 'Message Viewer', 'msgSelector', 'msgtools-msgrx' );
-    addMenuItem( container, '+ Transmit message', 'Message Sender', 'msgSelector', 'msgtools-msgtx' );
-    addMenuItem( container, '+ Plot a message', 'Message Plot', 'msgSelector', 'msgtools-msgplot' );
+    addMenuItem( container, '+ View a packet', 'Packet Viewer', 'msgSelector', 'msgtools-msgrx', '');
+    addMenuItem( container, '+ Send a command', 'Command Sender', 'msgSelector', 'msgtools-msgtx', '');
+    addMenuItem( container, '+ Plot a message', 'Message Plot', 'msgSelector', 'msgtools-msgplot', '');
 }
 
 // Only include the add buttons if the layout is unlocked
