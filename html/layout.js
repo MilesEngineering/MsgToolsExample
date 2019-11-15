@@ -42,8 +42,8 @@ var msgSelectorComponent = function( container, state ) {
         })
     })
 
-    container.on('resize', function(e){
-        componentObj.resize()
+    container.on('resize', function(){
+        componentObj.resize(container.width, container.height);
     })
 
 }
