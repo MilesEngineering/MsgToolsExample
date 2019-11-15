@@ -41,6 +41,11 @@ var msgSelectorComponent = function( container, state ) {
             selection: e.detail
         })
     })
+
+    container.on('resize', function(e){
+        componentObj.resize()
+    })
+
 }
 
 // Register components with golden layout
