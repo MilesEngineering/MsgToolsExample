@@ -1,0 +1,62 @@
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
+        <script type="text/javascript" src="./goldenlayout/goldenlayout.min.js"></script>
+        <script type="text/javascript" src="./msgtools/d3.v3.min.js"></script>
+        <script type="text/javascript" src="./msgtools/msgtools.js"></script>
+        <link type="text/css" rel="stylesheet" href="./bootstrap.min.css" />
+        <link type="text/css" rel="stylesheet" href="./goldenlayout/goldenlayout-base.css" />
+        <link type="text/css" rel="stylesheet" href="./goldenlayout/goldenlayout-light-theme.css" />
+        <link type="text/css" rel="stylesheet" href="./style.css" />
+    </head>
+    <body>
+        <div class="container-fluid">
+            <div class="row">
+                <nav style="margin: 15px 0;">
+                    <div id="menu_container">
+                        <button type="button" name="button" class="btn btn-warning pull-right" id="lock_btn" style="margin-left: 15px;">Lock</button>
+                        <button type="button" name="button" class="btn btn-primary pull-right" id="save_btn">Save</button>
+                    </div>
+                </nav>
+            </div>
+            <div class="row">
+                <div id="layout_container" style="height:100%;">
+                </div>
+            </div>
+        </div>
+    </body>
+    <script type="text/javascript" src="./layout.js"></script>
+    <script type="text/javascript" src="./msgtools/MsgFieldLabel.js" ></script>
+    <script type="text/javascript" src="./msgtools/MsgTree.js" ></script>
+    <script type="text/javascript" src="./msgtools/MsgSelector.js" ></script>
+    <script type="text/javascript" src="./msgtools/MsgDialog.js" ></script>
+    <script type="text/javascript" src="./msgtools/Plot-component.js" ></script>
+    <script type="text/javascript" src="./msgtools/MsgPlot.js" ></script>
+    <script type='text/javascript'>
+        // Keep this at the bottom so there's time for the web components to load
+        function connectToServer() {
+            var client = new msgtools.MessageClient('WebGuiDemo');
+            var options = new Map();
+            options.set('server', location.hostname);
+            // commenting out for development, uncomment to connect
+            client.connect(options);
+        }
+        msgtools.load('../obj/CodeGenerator/Javascript/', ['TextCommand',
+                                                           'TestCase3',
+                                                           'BandwidthTest',
+                                                           'TextResponse',
+                                                           'TestCase4',
+                                                           'Printf',
+                                                           'TestCase1',
+                                                           'TestCase2',
+                                                           'Taxonomy.Canidae.Wolf',
+                                                           'Taxonomy.Canidae.Canis',
+                                                           'Taxonomy.Canidae.Vulpes',
+                                                           'Taxonomy.Canidae.Dog',
+                                                           'Taxonomy.Canidae.AFox',
+                                                           'Taxonomy.Canidae.Fox',
+                                                           'Taxonomy.Canidae.Canidae'
+                                                         ]).then(() => {connectToServer()});
+    </script>
+</html>
