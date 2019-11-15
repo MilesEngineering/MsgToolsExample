@@ -139,3 +139,7 @@ function createMenu(container){
 if(msgLayout.config.settings.reorderEnabled == true ){
     createMenu('#menu_container');
 }
+
+$(window).resize(function () {
+msgLayout.updateSize($(window).width(), $(window).height());
+});
