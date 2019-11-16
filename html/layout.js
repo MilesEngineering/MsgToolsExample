@@ -6,6 +6,9 @@ let config = {
     content: [] // users can start building out their own layout immediately
 };
 
+function stateClean(clean) {
+    saveButton = $('#save_btn').prop('disabled', clean);
+}
 
 //User can save their layout to local storage
 let msgLayout;
@@ -32,14 +35,13 @@ var msgSelectorComponent = function( container, state ) {
         return;
     }
 
-    let componentObj = new MsgSelector(handler = state.handler, selection = state.selection);
+    console.log(state);
+    let componentObj = new MsgSelector(handler = state.handler, selection = state.selection, filter = undefined, handlerSettings = state);
     container.getElement().append(componentObj);
 
     componentObj.addEventListener('settingsChanged', function(e){
-        container.setState({
-            handler: state.handler,
-            selection: e.detail
-        })
+        container.setState(Object.assign( {}, {handler: state.handler}, e.detail));
+        stateClean(false);
     })
 
     container.on('resize', function(){
@@ -71,6 +73,7 @@ msgLayout.init();
     element.click(function(e){
         e.preventDefault();
         saveState(false);
+        stateClean(true);
     });
 }());
 
@@ -85,20 +88,36 @@ msgLayout.init();
     let lockableConfigs = ['reorderEnabled', 'showPopoutIcon', 'showCloseIcon'];
 
     element.click(function(){
+        var editable = false;
         if(msgLayout.config.settings.reorderEnabled === true){
             for(let key in msgLayout.config.settings){
                 if(lockableConfigs.includes(key)){
                     msgLayout.config.settings[key] = false;
+                    editable = false;
                 }
             }
         } else {
             for(let key in msgLayout.config.settings){
                 if(lockableConfigs.includes(key)){
                     msgLayout.config.settings[key] = true;
+                    editable = true;
                 }
             }
         }
-        saveState(true);
+        //saveState(true);
+        
+        // iterate over containers, set each one's widget's editable state
+        function setChildrenEditable(container, editable, spaces="") {
+            if(container.isComponent) {
+                var item = container.element[0].firstChild.firstChild;
+                item.setEditable(editable);
+            } else {
+                for(var i = 0; i < container.contentItems.length; i++ ) {
+                    setChildrenEditable(container.contentItems[i], editable, spaces+" ");
+                }
+            }
+        }
+        setChildrenEditable(msgLayout.root, editable);
     });
 }());
 
@@ -131,6 +150,7 @@ function createMenu(container){
     menu.append(directions);
 
     addMenuItem( container, '+ View a packet', 'Packet Viewer', 'msgSelector', 'msgtools-msgrx', '');
+    addMenuItem( container, '+ View a packet row', 'Packet Viewer', 'msgSelector', 'msgtools-msgrxrow', '');
     addMenuItem( container, '+ Send a command', 'Command Sender', 'msgSelector', 'msgtools-msgtx', '');
     addMenuItem( container, '+ Plot a message', 'Message Plot', 'msgSelector', 'msgtools-msgplot', '');
 }
