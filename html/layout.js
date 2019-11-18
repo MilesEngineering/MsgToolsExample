@@ -1,167 +1,189 @@
-// base configuration for golden layout
-let config = {
-    settings: {
-        reorderEnabled: true,
-    },
-    content: [] // users can start building out their own layout immediately
-};
+class MainLayout {
+    constructor() {
+        // base configuration for golden layout
+        var config = {
+            settings: {
+            },
+            content: [] // users can start building out their own layout immediately
+        };
 
-function stateClean(clean) {
-    saveButton = $('#save_btn').prop('disabled', clean);
-}
+        // check local storage and use saved state if it exists
+        this.settingsFilename = localStorage.getItem( 'settingsFilename');
+        let savedState = localStorage.getItem( 'savedState.'+this.settingsFilename ); 
+        if( savedState !== null && savedState !== 'undefined' ) {
+            config = JSON.parse( savedState );
+        }
 
-//User can save their layout to local storage
-let msgLayout;
-let savedState = localStorage.getItem( 'savedState' ); // check local storage and use saved state if it exists
-let editState = localStorage.getItem( 'editState' ); // check local storage and use saved state if it exists
+        // Sets a new Golden Layout instance, using config and attaching to the target container
+        // config argument is required. if no target is provided, golden layout
+        // will take over the document.body
+        this.msgLayout = new GoldenLayout( config, $('#layout_container') );
+        this.msgLayout.registerComponent( 'msgSelector', msgSelectorComponent );
+        this.msgLayout.init();
 
-// Sets a new Golden Layout instance, using config and attaching to the target container
-// config argument is required. if no target is provided, golden layout
-// will take over the document.body
-if( savedState !== null && savedState !== 'undefined' ) {
-    msgLayout = new GoldenLayout( JSON.parse( savedState ), $('#layout_container') );
-} else {
-    msgLayout = new window.GoldenLayout( config, $('#layout_container'));
-}
+        this.settingsMenu = undefined;
 
-// Golden Layout needs a component variable
-var msgSelectorComponent = function( container, state ) {
+        // lock/unlock button
+        {
+            let lockBtn = document.getElementById('lock_btn');
+            if(lockBtn != undefined) {
+                if(this.msgLayout.config.settings['showCloseIcon'] != true) {
+                    lockBtn.textContent = 'Unlock';
+                }
+                lockBtn.onclick = function(){
+                    let editable = (this.textContent == 'Unlock');
+                    setEditable(editable);
+                    // save and reload, otherwise settings in golden layout
+                    // don't take effect except on new containers.
+                    saveConfig(this.settingsMenu.settingsName);
+                    location.reload();
+                };
+            }
+        }
 
-    //check for local storage and
-    if( !typeof window.localStorage ) {
-        container.getElement()
-                 .append('<h2 class="err">Your browser doesn\'t support \
-                 local storage, which is necessary to save your changes.</h2>');
-        return;
+        this.createMenu('#menu_container');
+
+        this.stateClean(true);
+    }
+    stateClean(clean) {
+        this.settingsMenu.stateClean(clean);
     }
 
-    console.log(state);
-    let componentObj = new MsgSelector(handler = state.handler, selection = state.selection, filter = undefined, handlerSettings = state);
-    container.getElement().append(componentObj);
+    // Save to local storage, called by save button
+    saveConfig(filename) {
+        console.log('save '+filename);
+        const state = JSON.stringify( this.msgLayout.toConfig() );
+        localStorage.setItem( 'savedState.'+filename, state );
+        this.stateClean(true);
+    }
 
+    loadConfig(filename) {
+        console.log('load '+filename);
+        if(this.settingsFilename != filename) {
+            localStorage.setItem('settingsFilename', filename);
+            location.reload();
+        }
+    }
+
+    setEditable(editable) {
+        console.log(editable);
+        // Any configs that we want to disable when screen is locked
+        let lockableConfigs = ['reorderEnabled', 'showPopoutIcon', 'showCloseIcon', 'hasHeaders', 'showMaximiseIcon'];
+        // how to disable splitters?
+        // https://github.com/golden-layout/golden-layout/issues/351
+        // .lm_splitter { visibility: hidden; pointer-events: none; }
+        let lockBtn = document.getElementById('lock_btn');
+        if(editable){
+            lockBtn.textContent = 'Lock';
+        } else {
+            lockBtn.textContent = 'Unlock';
+        }
+        this.msgLayout.config.settings.reorderEnabled = true;
+        for(let key in this.msgLayout.config.settings){
+            if(lockableConfigs.includes(key)){
+                this.msgLayout.config.settings[key] = editable;
+            }
+        }
+        // don't change editable state of all widgets.  they have their own buttons for that.
+        // also, currently lock/unlock causes a reload, so doing the below would have no effect.
+        if(0) {
+            // iterate over containers, set each one's widget's editable state
+            function setChildrenEditable(container, editable, spaces="") {
+                if(container.isComponent) {
+                    var item = container.element[0].firstChild.firstChild;
+                    item.setEditable(editable);
+                } else {
+                    for(var i = 0; i < container.contentItems.length; i++ ) {
+                        setChildrenEditable(container.contentItems[i], editable, spaces+" ");
+                    }
+                }
+            }
+            setChildrenEditable(this.msgLayout.root, editable);
+        }
+    }
+
+    // Add Buttons
+    addMenuItem( container, text, title, componentType, handler ) {
+        const element = $( '<button class="btn btn-success" style="margin: 0 5px;">' + text + '</button>' );
+
+        $( container ).append( element );
+
+        const newItemConfig = {
+            type: 'component',
+            componentName: componentType,
+            title: title,
+            componentState: {
+                handler: handler,
+                selection: undefined
+            }
+        };
+
+        this.msgLayout.createDragSource( element, newItemConfig );
+    }
+
+    getSettingsChoices() {
+        return {entries:[{name:'a'},
+                         {name:'b',
+                          entries: [{name:'1'}, {name:'2'}]
+                         }
+                        ]
+               };
+    }
+
+    createMenu(container){
+        const menu = $(container);
+        const directions = '<span style="display: inline-block; font-size 1.5em;">Drag items to add: </span>';
+        menu.append(directions);
+
+        this.addMenuItem( container, '+ Rx Row', 'Packet Viewer', 'msgSelector', 'MsgRxRow');
+        this.addMenuItem( container, '+ Rx Column', 'Packet Viewer', 'msgSelector', 'MsgRxColumn');
+        this.addMenuItem( container, '+ Tx Row', 'Command Sender', 'msgSelector', 'MsgTxRow');
+        this.addMenuItem( container, '+ Tx Column', 'Command Sender', 'msgSelector', 'MsgTxColumn');
+        this.addMenuItem( container, '+ Plot a message', 'Message Plot', 'msgSelector', 'MsgPlot');
+        
+        this.settingsMenu = new SettingsMenu(this.settingsFilename, this.getSettingsChoices.bind(this));
+        var that = this;
+        this.settingsMenu.addEventListener('save', function(e){
+            let filename = e.detail;
+            that.saveConfig(filename);
+        })
+        this.settingsMenu.addEventListener('load', function(e){
+            let filename = e.detail;
+            that.loadConfig(filename);
+        })
+        this.loadConfig(this.settingsFilename);
+        $(container).append( this.settingsMenu );
+    }
+}
+
+var mainLayout = new MainLayout();
+
+// Golden Layout needs a component variable
+function msgSelectorComponent( container, state ) {
+
+    let componentObj = new MsgSelector(state.handler, state.selection, state);
+    container.getElement().append(componentObj);
+    
+    // if it's a brand new component, mark our state as dirty so it can be saved.
+    if(state.selection == undefined) {
+        mainLayout.stateClean(false);
+    }
+
+    // when our component's settings change, store them in the container,
+    // and mark the state as unclean.
     componentObj.addEventListener('settingsChanged', function(e){
-        container.setState(Object.assign( {}, {handler: state.handler}, e.detail));
-        stateClean(false);
+        container.setState(e.detail);
+        mainLayout.stateClean(false);
     })
 
+    // when container changes size, tell the component about it.
     container.on('resize', function(){
         componentObj.resize(container.width, container.height);
     })
-
-}
-
-// Register components with golden layout
-msgLayout.registerComponent( 'msgSelector', msgSelectorComponent);
-// END register components
-
-// Save to local storage, called by layout change and save button
-function saveState(reload) {
-    const state = JSON.stringify( msgLayout.toConfig() );
-    localStorage.setItem( 'savedState', state );
-    if(reload){
-        location.reload();
-    }
-}
-
-//initializing our layout
-msgLayout.init();
-
-// save state button
-(function saveButton() {
-    let element = $('#save_btn');
-
-    element.click(function(e){
-        e.preventDefault();
-        saveState(false);
-        stateClean(true);
-    });
-}());
-
-// lock/unlock button
-(function layoutLock() {
-    let element = $('#lock_btn');
-    if(msgLayout.config.settings.reorderEnabled === false){
-        element.html('Unlock');
-    }
-
-    // Any configs that we want to disable when screen is locked
-    let lockableConfigs = ['reorderEnabled', 'showPopoutIcon', 'showCloseIcon'];
-
-    element.click(function(){
-        var editable = false;
-        if(msgLayout.config.settings.reorderEnabled === true){
-            for(let key in msgLayout.config.settings){
-                if(lockableConfigs.includes(key)){
-                    msgLayout.config.settings[key] = false;
-                    editable = false;
-                }
-            }
-        } else {
-            for(let key in msgLayout.config.settings){
-                if(lockableConfigs.includes(key)){
-                    msgLayout.config.settings[key] = true;
-                    editable = true;
-                }
-            }
-        }
-        //saveState(true);
-        
-        // iterate over containers, set each one's widget's editable state
-        function setChildrenEditable(container, editable, spaces="") {
-            if(container.isComponent) {
-                var item = container.element[0].firstChild.firstChild;
-                item.setEditable(editable);
-            } else {
-                for(var i = 0; i < container.contentItems.length; i++ ) {
-                    setChildrenEditable(container.contentItems[i], editable, spaces+" ");
-                }
-            }
-        }
-        setChildrenEditable(msgLayout.root, editable);
-    });
-}());
-
-
-// Add Buttons
-function addMenuItem( container, text, title, componentType, handler, selection ) {
-    // if(typeof(selection) === 'undefined' || selection === '') {
-    //     let selection = 'fsw.msp.hawk.TlmAck';
-    // }
-    const element = $( '<button class="btn btn-success" style="margin: 0 5px;">' + text + '</button>' );
-
-    $( container ).append( element );
-
-    const newItemConfig = {
-        type: 'component',
-        componentName: componentType,
-        title: title,
-        componentState: {
-            handler: handler,
-            selection: selection
-        }
-    };
-
-    msgLayout.createDragSource( element, newItemConfig );
-};
-
-function createMenu(container){
-    const menu = $(container);
-    const directions = '<span style="display: inline-block; font-size 1.5em;">Drag items to add: </span>';
-    menu.append(directions);
-
-    addMenuItem( container, '+ View a packet', 'Packet Viewer', 'msgSelector', 'msgtools-msgrx', '');
-    addMenuItem( container, '+ View a packet row', 'Packet Viewer', 'msgSelector', 'msgtools-msgrxrow', '');
-    addMenuItem( container, '+ Send a command', 'Command Sender', 'msgSelector', 'msgtools-msgtx', '');
-    addMenuItem( container, '+ Plot a message', 'Message Plot', 'msgSelector', 'msgtools-msgplot', '');
-}
-
-// Only include the add buttons if the layout is unlocked
-if(msgLayout.config.settings.reorderEnabled == true ){
-    createMenu('#menu_container');
 }
 
 $(window).resize(function () {
     let height = $('#layout_container').height();
     let width = $('#layout_container').width();
-    msgLayout.updateSize(width, height);
+    mainLayout.msgLayout.updateSize(width, height);
 });
