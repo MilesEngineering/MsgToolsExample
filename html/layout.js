@@ -40,12 +40,13 @@ class MainLayout {
                 if(this.msgLayout.config.settings['showCloseIcon'] != true) {
                     lockBtn.textContent = 'Unlock';
                 }
+                var that = this;
                 lockBtn.onclick = function(){
                     let editable = (this.textContent == 'Unlock');
-                    setEditable(editable);
+                    that.setEditable(editable);
                     // save and reload, otherwise settings in golden layout
                     // don't take effect except on new containers.
-                    saveConfig(this.settingsMenu.settingsName);
+                    that.saveConfig(that.settingsMenu.settingsName);
                     location.reload();
                 };
             }
