@@ -212,6 +212,11 @@ function msgSelectorComponent( container, state ) {
     container.on('resize', function(){
         componentObj.resize(container.width, container.height);
     })
+    
+    // when container is destroyed, also destroy the component.
+    container.on('destroy', function(){
+        componentObj.destroy();
+    })
 }
 
 $(window).resize(function () {
