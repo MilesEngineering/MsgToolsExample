@@ -1,0 +1,22 @@
+# WsgiDAV configuration file
+# See http://wsgidav.readthedocs.io/en/latest/user_guide_configure.html
+server: "cheroot"
+host: 0.0.0.0
+port: 8000
+
+
+#: Application root, applied before provider mapping shares,
+#: e.g. <mount_path>/<share_name>/<res_path>
+mount_path: null
+provider_mapping:
+    "/":
+        root: ".."
+        readonly: true
+    "/html/configs/":
+        root: "./configs"
+        readonly: false
+
+# anonymous access
+simple_dc:
+    user_mapping:
+        "*": true

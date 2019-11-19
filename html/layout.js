@@ -1,3 +1,5 @@
+USE_LOCAL_STORAGE = 0
+
 class MainLayout {
     constructor() {
         // base configuration for golden layout
@@ -7,10 +9,18 @@ class MainLayout {
             content: [] // users can start building out their own layout immediately
         };
 
-        // check local storage and use saved state if it exists
+        this.settingsStorage = new SettingsStorage();
+        
         this.settingsFilename = localStorage.getItem( 'settingsFilename');
-        let savedState = localStorage.getItem( 'savedState.'+this.settingsFilename ); 
-        if( savedState !== null && savedState !== 'undefined' ) {
+        var savedState;
+        if(USE_LOCAL_STORAGE) {
+            // check local storage
+            savedState = localStorage.getItem( 'savedState.'+this.settingsFilename ); 
+        } else {
+            savedState = this.settingsStorage.load(this.settingsFilename);
+        }
+        // use saved state if it exists
+        if( savedState !== null && savedState !== undefined && savedState != "") {
             config = JSON.parse( savedState );
         }
 
@@ -53,7 +63,11 @@ class MainLayout {
     saveConfig(filename) {
         console.log('save '+filename);
         const state = JSON.stringify( this.msgLayout.toConfig() );
-        localStorage.setItem( 'savedState.'+filename, state );
+        if(USE_LOCAL_STORAGE) {
+            localStorage.setItem( 'savedState.'+filename, state );
+        } else {
+            this.settingsStorage.save(filename, state);
+        }
         this.stateClean(true);
     }
 
@@ -63,6 +77,15 @@ class MainLayout {
             localStorage.setItem('settingsFilename', filename);
             location.reload();
         }
+    }
+    deleteConfig(filename) {
+        console.log('delete '+filename);
+        if(USE_LOCAL_STORAGE) {
+            localStorage.deleteItem( 'savedState.'+filename );
+        } else {
+            this.settingsStorage.rm(filename);
+        }
+        location.reload();
     }
 
     setEditable(editable) {
@@ -122,12 +145,16 @@ class MainLayout {
     }
 
     getSettingsChoices() {
-        return {entries:[{name:'a'},
-                         {name:'b',
-                          entries: [{name:'1'}, {name:'2'}]
-                         }
-                        ]
-               };
+        if(USE_LOCAL_STORAGE) {
+            return {entries:[{name:'a'},
+                             {name:'b',
+                              entries: [{name:'1'}, {name:'2'}]
+                             }
+                            ]
+                   };
+        } else {
+            return this.settingsStorage.list();
+        }
     }
 
     createMenu(container){
@@ -150,6 +177,10 @@ class MainLayout {
         this.settingsMenu.addEventListener('load', function(e){
             let filename = e.detail;
             that.loadConfig(filename);
+        })
+        this.settingsMenu.addEventListener('delete', function(e){
+            let filename = e.detail;
+            that.deleteConfig(filename);
         })
         this.loadConfig(this.settingsFilename);
         $(container).append( this.settingsMenu );
