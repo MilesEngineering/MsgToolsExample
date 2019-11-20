@@ -8,7 +8,7 @@ class MainLayout {
             },
             content: [] // users can start building out their own layout immediately
         };
-        
+
         var currentPath = 'http://' + window.location.hostname + ":" + window.location.port + '/';
 
         this.settingsStorage = new SettingsStorage(currentPath);
@@ -33,7 +33,7 @@ class MainLayout {
         this.msgLayout.registerComponent( 'msgSelector', msgSelectorComponent );
         this.msgLayout.init();
 
-        this.settingsMenu = undefined;
+        this.settingsGui = undefined;
 
         // lock/unlock button
         {
@@ -48,18 +48,18 @@ class MainLayout {
                     that.setEditable(editable);
                     // save and reload, otherwise settings in golden layout
                     // don't take effect except on new containers.
-                    that.saveConfig(that.settingsMenu.settingsName);
+                    that.saveConfig(that.settingsGui.settingsName);
                     location.reload();
                 };
             }
         }
 
-        this.createMenu('#menu_container');
+        this.createMenu($('#toolbar_container'), $('#menu_container'));
 
         this.stateClean(true);
     }
     stateClean(clean) {
-        this.settingsMenu.stateClean(clean);
+        this.settingsGui.stateClean(clean);
     }
 
     // Save to local storage, called by save button
@@ -132,7 +132,7 @@ class MainLayout {
     addMenuItem( container, text, title, componentType, handler ) {
         const element = $( '<button class="btn btn-success" style="margin: 0 5px;">' + text + '</button>' );
 
-        $( container ).append( element );
+        container.append( element );
 
         const newItemConfig = {
             type: 'component',
@@ -160,34 +160,39 @@ class MainLayout {
         }
     }
 
-    createMenu(container){
-        const menu = $(container);
+    createMenu(toolBar, menu){
         const directions = '<span style="display: inline-block; font-size 1.5em;">Drag items to add: </span>';
-        menu.append(directions);
+        toolBar.append(directions);
 
-        this.addMenuItem( container, '+ Rx Row', 'Packet Viewer', 'msgSelector', 'MsgRxRow');
-        this.addMenuItem( container, '+ Rx Column', 'Packet Viewer', 'msgSelector', 'MsgRxColumn');
-        this.addMenuItem( container, '+ Tx Row', 'Command Sender', 'msgSelector', 'MsgTxRow');
-        this.addMenuItem( container, '+ Tx Column', 'Command Sender', 'msgSelector', 'MsgTxColumn');
-        this.addMenuItem( container, '+ Plot a message', 'Message Plot', 'msgSelector', 'MsgPlot');
+        this.addMenuItem( toolBar, '+ Rx Row', 'Packet Viewer', 'msgSelector', 'MsgRxRow');
+        this.addMenuItem( toolBar, '+ Rx Column', 'Packet Viewer', 'msgSelector', 'MsgRxColumn');
+        this.addMenuItem( toolBar, '+ Tx Row', 'Command Sender', 'msgSelector', 'MsgTxRow');
+        this.addMenuItem( toolBar, '+ Tx Column', 'Command Sender', 'msgSelector', 'MsgTxColumn');
+        this.addMenuItem( toolBar, '+ Plot a message', 'Message Plot', 'msgSelector', 'MsgPlot');
 
-        this.settingsMenu = new SettingsMenu(this.settingsFilename, this.getSettingsChoices.bind(this));
+        this.settingsGui = new SettingsGui(this.settingsFilename, this.getSettingsChoices.bind(this));
         var that = this;
-        this.settingsMenu.addEventListener('save', function(e){
+        this.settingsGui.addEventListener('save', function(e){
             let filename = e.detail;
             that.saveConfig(filename);
         })
-        this.settingsMenu.addEventListener('load', function(e){
+        this.settingsGui.addEventListener('load', function(e){
             let filename = e.detail;
             that.loadConfig(filename);
         })
-        this.settingsMenu.addEventListener('delete', function(e){
+        this.settingsGui.addEventListener('delete', function(e){
             let filename = e.detail;
             that.deleteConfig(filename);
         })
         this.loadConfig(this.settingsFilename);
-        $(container).append( this.settingsMenu );
+        toolBar.append( this.settingsGui.saveButton );
+        menu.append( this.settingsGui.saveAsButton );
+        menu.append( this.settingsGui.newFilename );
+        menu.append( this.settingsGui.chooseSettingsDropdown );
+        menu.append( this.settingsGui.deleteButton );
     }
+
+
 }
 
 var mainLayout = new MainLayout();
