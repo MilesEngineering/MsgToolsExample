@@ -106,16 +106,30 @@ a.button:hover {
     top: 0;
     height: 100vh;
     max-height: 100vh;
-    width: 400px;
-    max-width: 400px;
     background: white;
     -webkit-box-shadow: -8px 0 10px -6px #a9a9a9;
     -moz-box-shadow: -8px 0 10px -6px #a9a9a9;
     box-shadow: -8px 0 10px -6px #a9a9a9;
+    z-index: 999;
 }
 
-#right_nav .inner-sidebar {
+#right_nav.closed {
+    width: 0;
+}
+
+#right_nav.open {
+    width: 400px;
+}
+
+.inner-sidebar {
     padding: 45px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.inner-sidebar > * {
+    margin-top: 15px;
 }
 
 #right_nav #close {

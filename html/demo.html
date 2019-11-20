@@ -25,7 +25,7 @@
                 <div id="layout_container" style="height:100%;">
                 </div>
             </div>
-            <div class="sidebar" id="right_nav">
+            <div class="sidebar closed" id="right_nav">
                 <div class="inner-sidebar" id="menu_container">
                     <a class="nav-toggle button" id="close">
                         &times;
@@ -46,7 +46,10 @@
     <script type="text/javascript" src="./msgtools/Plot-component.js" ></script>
     <script type="text/javascript" src="./msgtools/MsgPlot.js" ></script>
     <script type="text/javascript" src="./layout.js"></script>
+    <script type="text/javascript" src="./menu.js"></script>
+
     <script type='text/javascript'>
+        rightMenu('open', 'close', 'right_nav');
         // Keep this at the bottom so there's time for the web components to load
         function connectToServer() {
             var client = new msgtools.MessageClient('WebGuiDemo');
