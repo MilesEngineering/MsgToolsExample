@@ -8,14 +8,16 @@ class MainLayout {
             },
             content: [] // users can start building out their own layout immediately
         };
-
-        this.settingsStorage = new SettingsStorage();
         
+        var currentPath = 'http://' + window.location.hostname + ":" + window.location.port + '/';
+
+        this.settingsStorage = new SettingsStorage(currentPath);
+
         this.settingsFilename = localStorage.getItem( 'settingsFilename');
         var savedState;
         if(USE_LOCAL_STORAGE) {
             // check local storage
-            savedState = localStorage.getItem( 'savedState.'+this.settingsFilename ); 
+            savedState = localStorage.getItem( 'savedState.'+this.settingsFilename );
         } else {
             savedState = this.settingsStorage.load(this.settingsFilename);
         }
@@ -168,7 +170,7 @@ class MainLayout {
         this.addMenuItem( container, '+ Tx Row', 'Command Sender', 'msgSelector', 'MsgTxRow');
         this.addMenuItem( container, '+ Tx Column', 'Command Sender', 'msgSelector', 'MsgTxColumn');
         this.addMenuItem( container, '+ Plot a message', 'Message Plot', 'msgSelector', 'MsgPlot');
-        
+
         this.settingsMenu = new SettingsMenu(this.settingsFilename, this.getSettingsChoices.bind(this));
         var that = this;
         this.settingsMenu.addEventListener('save', function(e){
@@ -195,7 +197,7 @@ function msgSelectorComponent( container, state ) {
 
     let componentObj = new MsgSelector(state.handler, state.selection, state);
     container.getElement().append(componentObj);
-    
+
     // if it's a brand new component, mark our state as dirty so it can be saved.
     if(state.selection == undefined) {
         mainLayout.stateClean(false);
@@ -212,7 +214,7 @@ function msgSelectorComponent( container, state ) {
     container.on('resize', function(){
         componentObj.resize(container.width, container.height);
     })
-    
+
     // when container is destroyed, also destroy the component.
     container.on('destroy', function(){
         componentObj.destroy();
