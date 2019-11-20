@@ -14,13 +14,24 @@
         <div class="container-fluid">
             <div class="row">
                 <nav style="margin: 15px 0;">
-                    <div id="menu_container">
-                        <button type="button" name="button" class="btn btn-warning pull-right" id="lock_btn" style="margin-left: 15px;">Lock</button>
+                    <div class="container" id="toolbar_container">
+                        <a class="nav-toggle pull-right button" id="open">
+                            <img src="../html/img/menu-icon.svg" alt="menu">
+                        </a>
                     </div>
                 </nav>
             </div>
             <div class="row">
                 <div id="layout_container" style="height:100%;">
+                </div>
+            </div>
+            <div class="sidebar" id="right_nav">
+                <div class="inner-sidebar" id="menu_container">
+                    <a class="nav-toggle button" id="close">
+                        &times;
+                    </a>
+                    <h4>Current config: <span></span></h4>
+                    <button type="button" name="button" class="btn btn-warning pull-right" id="lock_btn" style="margin-left: 15px;">Lock</button>
                 </div>
             </div>
         </div>

@@ -78,8 +78,19 @@ msgtools-msgselector {
   /* --selector-display-padding:;
   --selector-display-width:;
 } */
+
 html * {
     box-sizing: border-box;
+}
+
+a.button {
+    cursor: pointer;
+    font-size: 36px;
+    color: black;
+}
+
+a.button:hover {
+    text-decoration: none;
 }
 
 #layout_container .lm_content {
@@ -87,4 +98,28 @@ html * {
   padding: 15px;
   max-width: 100% !important;
   max-height: 100% !important;
+}
+
+#right_nav {
+    position: fixed;
+    right: 0;
+    top: 0;
+    height: 100vh;
+    max-height: 100vh;
+    width: 400px;
+    max-width: 400px;
+    background: white;
+    -webkit-box-shadow: -8px 0 10px -6px #a9a9a9;
+    -moz-box-shadow: -8px 0 10px -6px #a9a9a9;
+    box-shadow: -8px 0 10px -6px #a9a9a9;
+}
+
+#right_nav .inner-sidebar {
+    padding: 45px;
+}
+
+#right_nav #close {
+    position: absolute;
+    top: -5px;
+    right: 20px;
 }
