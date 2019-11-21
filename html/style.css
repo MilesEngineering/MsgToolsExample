@@ -79,8 +79,12 @@ msgtools-msgselector {
   --selector-display-width:;
 } */
 
-html * {
+/* html * {
     box-sizing: border-box;
+} */
+
+.lm_header {
+    height: 20px !important;
 }
 
 a.button {
@@ -91,6 +95,11 @@ a.button {
 
 a.button:hover {
     text-decoration: none;
+}
+
+.btn-save {
+    float: right;
+    margin-right: 15px;
 }
 
 #layout_container .lm_content {
@@ -111,6 +120,7 @@ a.button:hover {
     -moz-box-shadow: -8px 0 10px -6px #a9a9a9;
     box-shadow: -8px 0 10px -6px #a9a9a9;
     z-index: 999;
+    transition: .3s;
 }
 
 #right_nav.closed {
@@ -132,8 +142,16 @@ a.button:hover {
     margin-top: 15px;
 }
 
-#right_nav #close {
+#open {
+    margin-top: -3px;
+}
+
+#close {
     position: absolute;
     top: -5px;
     right: 20px;
+}
+
+#lock_btn {
+    order: 6;
 }
