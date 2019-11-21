@@ -186,10 +186,12 @@ class MainLayout {
         })
         this.loadConfig(this.settingsFilename);
         toolBar.append( this.settingsGui.saveButton );
-        menu.append( this.settingsGui.saveAsButton );
-        menu.append( this.settingsGui.newFilename );
-        menu.append( this.settingsGui.chooseSettingsDropdown );
-        menu.append( this.settingsGui.deleteButton );
+        menu.find('h4').append( this.settingsGui.currentConfigHeader );
+        menu.find('.choose-config').append( this.settingsGui.chooseSettingsDropdown );
+        menu.find('.choose-config').append( this.settingsGui.deleteButton );
+
+        menu.find('.save-config').append( this.settingsGui.newFilename );
+        menu.find('.save-config').append( this.settingsGui.saveAsButton );
     }
 
 

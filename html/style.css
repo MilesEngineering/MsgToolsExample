@@ -83,6 +83,16 @@ msgtools-msgselector {
     box-sizing: border-box;
 } */
 
+/* All the web components styling */
+:root {
+    --editable-lock-btn-background: no-repeat center/100% url('/html/img/icon-lock.png');
+    --locked-lock-btn-background: no-repeat center/100% url('/html/img/icon-unlock.png');
+}
+
+h4 {
+    margin-bottom: 25px;
+}
+
 .lm_header {
     height: 20px !important;
 }
@@ -136,10 +146,34 @@ a.button:hover {
     display: flex;
     flex-direction: column;
     position: relative;
+    justify-content: space-between;
+    height: 100vh;
 }
 
 .inner-sidebar > * {
     margin-top: 15px;
+}
+
+.choose-config,
+.save-config {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.choose-config select,
+.save-config input {
+    flex: 1 1 auto;
+    margin: 0 20px 0 5px
+}
+
+.save-config > * {
+    margin-bottom: 15px;
+}
+
+.choose-config .btn-delete {
+    padding: 0 4px;
 }
 
 #open {
