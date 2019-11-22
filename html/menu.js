@@ -1,17 +1,18 @@
 //only used for the slide-out nav, not integral to the msgTools project
 
-function rightMenu(openID, closeID, targetID){
+function toggle(openID, targetID){
     let openBtn = document.getElementById(openID);
-    let closeBtn = document.getElementById(closeID);
     let menu = document.getElementById(targetID);
 
     openBtn.addEventListener('click', function(){
-        menu.classList.remove('closed');
-        menu.classList.add('open');
+        console.log(menu.classList);
+        if(menu.classList.contains('closed')){
+            menu.classList.remove('closed');
+            menu.classList.add('open');
+        } else {
+            menu.classList.remove('open');
+            menu.classList.add('closed');
+        }
     });
 
-    closeBtn.addEventListener('click', function(){
-        menu.classList.remove('open');
-        menu.classList.add('closed');
-    });
 }

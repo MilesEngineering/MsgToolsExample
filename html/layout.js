@@ -54,7 +54,7 @@ class MainLayout {
             }
         }
 
-        this.createMenu($('#toolbar_container'), $('#menu_container'));
+        this.createMenu($('#tab_toggle'), $('#menu_toggle'), $('#config_name'));
 
         this.stateClean(true);
     }
@@ -130,7 +130,7 @@ class MainLayout {
 
     // Add Buttons
     addMenuItem( container, text, title, componentType, handler ) {
-        const element = $( '<button class="btn btn-success" style="margin: 0 5px;">' + text + '</button>' );
+        const element = $( '<button class="btn btn-success">' + text + '</button>' );
 
         container.append( element );
 
@@ -160,7 +160,7 @@ class MainLayout {
         }
     }
 
-    createMenu(toolBar, menu){
+    createMenu(toolBar, menu, titlebar){
         const directions = '<span style="display: inline-block; font-size 1.5em;">Drag items to add: </span>';
         toolBar.append(directions);
 
@@ -185,13 +185,31 @@ class MainLayout {
             that.deleteConfig(filename);
         })
         this.loadConfig(this.settingsFilename);
-        toolBar.append( this.settingsGui.saveButton );
-        menu.find('h4').append( this.settingsGui.currentConfigHeader );
-        menu.find('.choose-config').append( this.settingsGui.chooseSettingsDropdown );
-        menu.find('.choose-config').append( this.settingsGui.deleteButton );
 
-        menu.find('.save-config').append( this.settingsGui.newFilename );
-        menu.find('.save-config').append( this.settingsGui.saveAsButton );
+        titlebar.append( this.settingsGui.currentConfigHeader );
+
+        menu.prepend( this.settingsGui.saveButton );
+        const chooseFileWrapper = `<div class='filename-wrapper'>
+                                     <button id='open_btn' class='btn btn-open'>Open</button> \
+                                     <button id='delete_btn' class='btn btn-delete'>Delete</button> \
+                                     <div class='filename-form' id='choose_file'></div> \
+                                 </div>`;
+        menu.prepend(chooseFileWrapper);
+
+        menu.find('#choose_file').append( this.settingsGui.chooseSettingsDropdown );
+        menu.find('#choose_file').append( this.settingsGui.deleteButton );
+
+        const filenameWrapper = `<div class='filename-wrapper'>
+                                     <button id='new_btn' class='btn btn-new'>New</button> \
+                                     <div class='filename-form' id='new_file'></div> \
+                                 </div>`;
+        menu.prepend(filenameWrapper);
+        menu.find('#new_file').prepend( this.settingsGui.newFilename );
+        menu.find('#new_file').append( this.settingsGui.saveAsButton );
+
+
+
+
     }
 
 

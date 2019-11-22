@@ -13,34 +13,27 @@
     <body>
         <div class="container-fluid">
             <div class="row">
-                <nav style="margin: 15px 0;">
-                    <div class="container" id="toolbar_container">
-                        <a class="nav-toggle pull-right button" id="open">
+                <nav>
+                    <div class="dropdown-container menu">
+                        <a class="button menu" id="menu_toggle_trigger">
                             <img src="../html/img/menu-icon.svg" alt="menu">
                         </a>
+                        <div class="dropdown closed" id="menu_toggle">
+                            <button type="button" name="button" class="btn btn-warning" id="lock_btn">Lock</button>
+                        </div>
                     </div>
+                    <div class="tab-container tabs" id="toolbar_container">
+                        <div class="dropdown-container tabs">
+                            <a class="button add" id="tab_toggle_trigger">+</a>
+                            <div class="dropdown closed" id="tab_toggle">
+                            </div>
+                        </div>
+                    </div>
+                    <h4 id="config_name"></h4>
                 </nav>
             </div>
             <div class="row">
                 <div id="layout_container" style="height:100%;">
-                </div>
-            </div>
-            <div class="sidebar closed" id="right_nav">
-                <div class="inner-sidebar" id="menu_container">
-                    <a class="nav-toggle button" id="close">
-                        &times;
-                    </a>
-                    <div>
-                        <h4>Currently viewing: </h4>
-                        <div class="choose-config">
-                            <span>Open: </span>
-                        </div>
-                    </div>
-
-                    <div class="save-config">
-                        <span>Save as: </span>
-                    </div>
-                    <button type="button" name="button" class="btn btn-warning" id="lock_btn">Lock</button>
                 </div>
             </div>
         </div>
@@ -57,31 +50,13 @@
     <script type="text/javascript" src="./layout.js"></script>
     <script type="text/javascript" src="./menu.js"></script>
 
+
     <script type='text/javascript'>
-        rightMenu('open', 'close', 'right_nav');
+        toggle('tab_toggle_trigger', 'tab_toggle');
+        toggle('menu_toggle_trigger', 'menu_toggle');
         // Keep this at the bottom so there's time for the web components to load
-        function connectToServer() {
-            var client = new msgtools.MessageClient('WebGuiDemo');
-            var options = new Map();
-            options.set('server', location.hostname);
-            // commenting out for development, uncomment to connect
-            client.connect(options);
-        }
-        msgtools.load('../obj/CodeGenerator/Javascript/', ['TextCommand',
-                                                           'TestCase3',
-                                                           'BandwidthTest',
-                                                           'TextResponse',
-                                                           'TestCase4',
-                                                           'Printf',
-                                                           'TestCase1',
-                                                           'TestCase2',
-                                                           'Taxonomy.Canidae.Wolf',
-                                                           'Taxonomy.Canidae.Canis',
-                                                           'Taxonomy.Canidae.Vulpes',
-                                                           'Taxonomy.Canidae.Dog',
-                                                           'Taxonomy.Canidae.AFox',
-                                                           'Taxonomy.Canidae.Fox',
-                                                           'Taxonomy.Canidae.Canidae'
-                                                         ]).then(() => {connectToServer()});
+
     </script>
+    <script type="text/javascript" src="./load.js"></script>
+
 </html>
