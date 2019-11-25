@@ -190,28 +190,23 @@ class MainLayout {
 
         menu.prepend( this.settingsGui.saveButton );
         const chooseFileWrapper = `<div class='filename-wrapper'>
-                                     <button id='open_btn' class='btn btn-open'>Open</button> \
-                                     <button id='delete_btn' class='btn btn-delete'>Delete</button> \
-                                     <div class='filename-form' id='choose_file'></div> \
+                                     <button id='open_btn' class='btn btn-open' target='choose_file'>Open</button> \
+                                     <div class='filename-form closed' id='choose_file'></div> \
                                  </div>`;
         menu.prepend(chooseFileWrapper);
 
         menu.find('#choose_file').append( this.settingsGui.chooseSettingsDropdown );
-        menu.find('#choose_file').append( this.settingsGui.deleteButton );
+        menu.prepend( this.settingsGui.deleteButton );
 
         const filenameWrapper = `<div class='filename-wrapper'>
-                                     <button id='new_btn' class='btn btn-new'>New</button> \
-                                     <div class='filename-form' id='new_file'></div> \
+                                     <button id='new_btn' class='btn btn-new' target='new_file'>New</button> \
+                                     <div class='filename-form closed' id='new_file'></div> \
                                  </div>`;
         menu.prepend(filenameWrapper);
         menu.find('#new_file').prepend( this.settingsGui.newFilename );
         menu.find('#new_file').append( this.settingsGui.saveAsButton );
 
-
-
-
     }
-
 
 }
 

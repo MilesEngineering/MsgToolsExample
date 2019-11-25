@@ -15,7 +15,7 @@
             <div class="row">
                 <nav>
                     <div class="dropdown-container menu">
-                        <a class="button menu" id="menu_toggle_trigger">
+                        <a class="button menu" id="menu_toggle_trigger" target="menu_toggle">
                             <img src="../html/img/menu-icon.svg" alt="menu">
                         </a>
                         <div class="dropdown closed" id="menu_toggle">
@@ -24,7 +24,7 @@
                     </div>
                     <div class="tab-container tabs" id="toolbar_container">
                         <div class="dropdown-container tabs">
-                            <a class="button add" id="tab_toggle_trigger">+</a>
+                            <a class="button add" id="tab_toggle_trigger" target="tab_toggle">+</a>
                             <div class="dropdown closed" id="tab_toggle">
                             </div>
                         </div>
@@ -51,12 +51,7 @@
     <script type="text/javascript" src="./menu.js"></script>
 
 
-    <script type='text/javascript'>
-        toggle('tab_toggle_trigger', 'tab_toggle');
-        toggle('menu_toggle_trigger', 'menu_toggle');
-        // Keep this at the bottom so there's time for the web components to load
-
-    </script>
+    <!-- Keep this at the bottom so there's time for the web components to load -->
     <script type="text/javascript" src="./load.js"></script>
 
 </html>
