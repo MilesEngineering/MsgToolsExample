@@ -1,37 +1,9 @@
-USE_LOCAL_STORAGE = 0
-
 class MainLayout {
     constructor() {
-        // base configuration for golden layout
-        var config = {
-            settings: {
-            },
-            content: [] // users can start building out their own layout immediately
-        };
-
         var currentPath = 'http://' + window.location.hostname + ":" + window.location.port + '/';
-
         this.settingsStorage = new SettingsStorage(currentPath);
 
-        this.settingsFilename = localStorage.getItem( 'settingsFilename');
-        var savedState;
-        if(USE_LOCAL_STORAGE) {
-            // check local storage
-            savedState = localStorage.getItem( 'savedState.'+this.settingsFilename );
-        } else {
-            savedState = this.settingsStorage.load(this.settingsFilename);
-        }
-        // use saved state if it exists
-        if( savedState !== null && savedState !== undefined && savedState != "") {
-            config = JSON.parse( savedState );
-        }
-
-        // Sets a new Golden Layout instance, using config and attaching to the target container
-        // config argument is required. if no target is provided, golden layout
-        // will take over the document.body
-        this.msgLayout = new GoldenLayout( config, $('#layout_container') );
-        this.msgLayout.registerComponent( 'msgSelector', msgSelectorComponent );
-        this.msgLayout.init();
+        this.loadLayout();
 
         this.settingsGui = undefined;
 
@@ -46,10 +18,6 @@ class MainLayout {
                 lockBtn.onclick = function(){
                     let editable = (this.textContent == 'Unlock');
                     that.setEditable(editable);
-                    // save and reload, otherwise settings in golden layout
-                    // don't take effect except on new containers.
-                    that.saveConfig(that.settingsGui.settingsName);
-                    location.reload();
                 };
             }
         }
@@ -58,6 +26,37 @@ class MainLayout {
 
         this.stateClean(true);
     }
+    // load the layout configuration from persistent storage
+    loadLayout() {
+        // base configuration for golden layout
+        var config = {
+            settings: {
+            },
+            content: [] // users can start building out their own layout immediately
+        };
+
+        this.settingsFilename = localStorage.getItem( 'settingsFilename');
+        const savedState = this.settingsStorage.load(this.settingsFilename);
+        // use saved state if it exists
+        if( savedState !== null && savedState !== undefined && savedState != "") {
+            config = JSON.parse( savedState );
+        }
+        
+        // destroy the old golden layout, if there was one.
+        if(this.msgLayout !== undefined) {
+            this.msgLayout.destroy();
+        }
+
+        // Sets a new Golden Layout instance, using config and attaching to the target container
+        // config argument is required. if no target is provided, golden layout
+        // will take over the document.body
+        this.msgLayout = new GoldenLayout( config, $('#layout_container') );
+        this.msgLayout.registerComponent( 'msgSelector', msgSelectorComponent );
+        this.msgLayout.init();
+    }
+    
+    // mark the state as clean or dirty, to enable/disable the save button, as a cue
+    // to the user for if their latest changes are saved or not.
     stateClean(clean) {
         this.settingsGui.stateClean(clean);
     }
@@ -66,33 +65,28 @@ class MainLayout {
     saveConfig(filename) {
         console.log('save '+filename);
         const state = JSON.stringify( this.msgLayout.toConfig() );
-        if(USE_LOCAL_STORAGE) {
-            localStorage.setItem( 'savedState.'+filename, state );
-        } else {
-            this.settingsStorage.save(filename, state);
-        }
+        this.settingsStorage.save(filename, state);
         this.stateClean(true);
     }
 
     loadConfig(filename) {
-        console.log('load '+filename);
+        //console.log('load '+filename);
         if(this.settingsFilename != filename) {
             localStorage.setItem('settingsFilename', filename);
-            location.reload();
+            this.loadLayout();
         }
     }
     deleteConfig(filename) {
         console.log('delete '+filename);
-        if(USE_LOCAL_STORAGE) {
-            localStorage.deleteItem( 'savedState.'+filename );
-        } else {
-            this.settingsStorage.rm(filename);
-        }
-        location.reload();
+        this.settingsStorage.rm(filename);
+        this.loadLayout();
     }
 
+    // Set the layout as editable or not.  this involves
+    // changing goldenlayout settings, destroying the layout,
+    // and recreating it.  Otherwise the settings change would
+    // only apply to newly created containers.
     setEditable(editable) {
-        console.log(editable);
         // Any configs that we want to disable when screen is locked
         let lockableConfigs = ['reorderEnabled', 'showPopoutIcon', 'showCloseIcon', 'hasHeaders', 'showMaximiseIcon'];
         // how to disable splitters?
@@ -110,22 +104,20 @@ class MainLayout {
                 this.msgLayout.config.settings[key] = editable;
             }
         }
-        // don't change editable state of all widgets.  they have their own buttons for that.
-        // also, currently lock/unlock causes a reload, so doing the below would have no effect.
-        if(0) {
-            // iterate over containers, set each one's widget's editable state
-            function setChildrenEditable(container, editable, spaces="") {
-                if(container.isComponent) {
-                    var item = container.element[0].firstChild.firstChild;
-                    item.setEditable(editable);
-                } else {
-                    for(var i = 0; i < container.contentItems.length; i++ ) {
-                        setChildrenEditable(container.contentItems[i], editable, spaces+" ");
-                    }
-                }
-            }
-            setChildrenEditable(this.msgLayout.root, editable);
-        }
+        
+        // make a copy of the settings that we can keep after we destory the layout
+        const config = JSON.parse( JSON.stringify( this.msgLayout.toConfig() ) );
+
+        // destroy the layout
+        this.msgLayout.destroy();
+        
+        // make a new one using the copy of the settings
+        this.msgLayout = new GoldenLayout( config, $('#layout_container') );
+        this.msgLayout.registerComponent( 'msgSelector', msgSelectorComponent );
+        this.msgLayout.init();
+        
+        // mark as dirty, so the user knows they can save it
+        this.stateClean(false);
     }
 
     // Add Buttons
@@ -148,16 +140,7 @@ class MainLayout {
     }
 
     getSettingsChoices() {
-        if(USE_LOCAL_STORAGE) {
-            return {entries:[{name:'a'},
-                             {name:'b',
-                              entries: [{name:'1'}, {name:'2'}]
-                             }
-                            ]
-                   };
-        } else {
-            return this.settingsStorage.list();
-        }
+        return this.settingsStorage.list();
     }
 
     createMenu(toolBar, menu, titlebar){
