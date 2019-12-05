@@ -1,0 +1,50 @@
+/* To style web components, you will need to use custom properties to create
+'bridges' (https://meowni.ca/posts/styling-the-dome/) into the shadow dom.
+The following custom properties will be applied to the msgtools web components
+in the shadow dom, as long as this file is linked to by the html template
+where the components are loaded.
+ */
+
+
+/* All overarching styles should be defined here */
+:root {
+    /* colors */
+    --color-dark:;
+    --color-dark-contrast:;
+    --color-dark-contrast-2:;
+    --color-light-contrast:;
+    --color-alert:;
+    --color-text:;
+
+    /* typography */
+    --main-font:; /* font-family */
+    --main-font-weight:; /* font-weight */
+    --base-font-size:; /* font-size */
+    --lg-font-size:; /* font-size */
+    --header-font-size:; /* font-size */
+    --header-text-letter-spacing:; /* letter-spacing */
+
+    --border:;
+
+    --btn-radius:;
+  }
+
+/* Specific components */
+ msgtools-tabs {
+   --tab-color:;
+   --tab-background-color:;
+   --tab-button-border:;
+   --tab-button-padding:;
+   --tab-button-padding-hover:; 
+   --tab-button-transition:;
+   --tab-background-hover:;
+   --tab-padding:;
+   --tab-button-border-bottom:;
+   --tab-button-border-hover:;
+   --wrapper-padding:;
+   --wrapper-border:;
+ }
+
+ msgtools-msgselector {
+
+ }

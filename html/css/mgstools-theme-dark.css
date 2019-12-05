@@ -1,0 +1,176 @@
+/* To style web components, you will need to use custom properties to create
+'bridges' (https://meowni.ca/posts/styling-the-dome/) into the shadow dom.
+The following custom properties will be applied to the msgtools web components
+in the shadow dom, as long as this file is linked to by the html template
+where the components are loaded.
+ */
+
+
+/* All overarching styles should be defined here */
+
+.msgtools-component {
+    --editable-lock-btn-background: no-repeat center/100% url('/html/img/icon-lock.png');
+    --locked-lock-btn-background: no-repeat center/100% url('/html/img/icon-unlock.png');
+}
+
+/* dark theme: */
+html {
+--color-dark: #010101; /* nearly black*/
+--color-text: #f0ece2;
+--color-offset-1: #acdbdf ;
+--color-offset-2: #69779b ;
+}
+/*  */
+
+body {
+    background: var(--color-dark);
+    color: var(--color-text);
+    letter-spacing: .035em;
+}
+
+a,
+button {
+    background: var(--color-dark);
+    color: var(--color-text);
+}
+
+button:hover {
+    background: var(--color-offset-1);
+    color: var(--color-dark);
+}
+
+button.btn.btn-success {
+    background-color: var(--color-offset-2);
+    border-color: var(--color-offset-2);
+}
+
+/* All the web components styling */
+
+h4 {
+    margin-bottom: 25px;
+}
+
+.lm_header {
+    height: 20px !important;
+}
+
+a.button {
+    cursor: pointer;
+    font-size: 36px;
+    line-height: 33px;
+}
+
+a.button:hover {
+    color: var(--color-offset-1);
+    text-decoration: none;
+}
+
+.btn-save {
+    float: right;
+    margin-right: 15px;
+}
+
+
+#layout_container .lm_content {
+  overflow-y: scroll;
+  padding: 15px;
+  max-width: 100% !important;
+  max-height: 100% !important;
+}
+
+/* NAVIGATION SECTION */
+nav {
+    margin: 5px 60px;
+    display: flex;
+    justify-content: flex-start;
+}
+
+nav > .dropdown-container > .button {
+    margin-right: 15px;
+}
+
+.dropdown-container {
+    position: relative;
+}
+
+.dropdown {
+    position: absolute;
+    top: 45px;
+    left: 0;
+    border: 1px solid var(--color-dark);
+    background: var(--color-dark);
+    color: var(--color-text);
+    border-radius: 2px;
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    min-width: 250px;
+    padding: 20px 15px;
+    -webkit-box-shadow: 4px 0 10px -6px #000;
+    -moz-box-shadow: 4px 0 10px -6px #000;
+    box-shadow: 4px 0 10px -6px #000;
+    transition: .3s;
+}
+
+.dropdown span {
+    margin-bottom: 15px;
+}
+
+.closed {
+    display: none !important;
+}
+.open {
+    display: flex !important;
+}
+
+.dropdown a,
+.dropdown button {
+    margin: 0 ;
+}
+
+.dropdown .filename-wrapper {
+    position: relative;
+}
+.dropdown .filename-form {
+    display: flex;
+    position: absolute;
+    left: 100%;
+    top: 0;
+    border: 1px solid #ccc;
+    background: white;
+    padding: 15px 30px;
+    -webkit-box-shadow: 4px 0 10px -6px black;
+    -moz-box-shadow: 4px 0 10px -6px #000;
+    box-shadow: 4px 0 10px -6px #000;
+}
+
+.dropdown .filename-form > button {
+    order: 2;
+    margin-left: 15px;
+}
+
+#tab_toggle button {
+    margin-bottom: 5px;
+}
+
+#menu_toggle {
+    padding: 0;
+}
+
+#menu_toggle button {
+    width: 100%;
+    border-radius: 0;
+    text-align: left;
+}
+
+#menu_toggle button:hover,
+#menu_toggle button:focus {
+    border: 1px solid var(--color-dark);
+    background: var(--color-dark);
+    background: var(--color-dark);
+    color: var(--color-text);
+}
+
+#config_name {
+    margin: 11px 0 0 45px;
+}
