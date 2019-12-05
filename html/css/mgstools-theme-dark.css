@@ -15,28 +15,30 @@ where the components are loaded.
 
 /* dark theme: */
 html {
---color-dark: #010101; /* nearly black*/
+--color-main: #010101; /* nearly black*/
 --color-text: #f0ece2;
 --color-offset-1: #acdbdf ;
 --color-offset-2: #69779b ;
+--color-border: #333333;
 }
 /*  */
 
 body {
-    background: var(--color-dark);
+    background: var(--color-main);
     color: var(--color-text);
     letter-spacing: .035em;
 }
 
 a,
 button {
-    background: var(--color-dark);
+    background: var(--color-main);
     color: var(--color-text);
 }
 
-button:hover {
+button:hover,
+.btn:hover {
     background: var(--color-offset-1);
-    color: var(--color-dark);
+    color: var(--color-main);
 }
 
 button.btn.btn-success {
@@ -78,6 +80,20 @@ a.button:hover {
   max-height: 100% !important;
 }
 
+/* FORMS */
+input,
+textarea {
+    color: var(--color-main);
+}
+
+select {
+    padding: 10px 15px;
+    min-width: 250px;
+    color: var(--color-main);
+}
+
+
+
 /* NAVIGATION SECTION */
 nav {
     margin: 5px 60px;
@@ -97,8 +113,8 @@ nav > .dropdown-container > .button {
     position: absolute;
     top: 45px;
     left: 0;
-    border: 1px solid var(--color-dark);
-    background: var(--color-dark);
+    border: 1px solid var(--color-border);
+    background: var(--color-main);
     color: var(--color-text);
     border-radius: 2px;
     z-index: 999;
@@ -135,13 +151,14 @@ nav > .dropdown-container > .button {
     display: flex;
     position: absolute;
     left: 100%;
-    top: 0;
-    border: 1px solid #ccc;
-    background: white;
+    top: -1;
+    border: 1px solid var(--color-border);
+    border-left-color: transparent;
+    background: black;
     padding: 15px 30px;
     -webkit-box-shadow: 4px 0 10px -6px black;
-    -moz-box-shadow: 4px 0 10px -6px #000;
-    box-shadow: 4px 0 10px -6px #000;
+    -moz-box-shadow: 4px 0 10px -6px black;
+    box-shadow: 4px 0 10px -6px black;
 }
 
 .dropdown .filename-form > button {
@@ -161,14 +178,17 @@ nav > .dropdown-container > .button {
     width: 100%;
     border-radius: 0;
     text-align: left;
+    border: 1px solid var(--color-main);
+    background: var(--color-main);
+    color: var(--color-text);
+
 }
 
 #menu_toggle button:hover,
 #menu_toggle button:focus {
-    border: 1px solid var(--color-dark);
-    background: var(--color-dark);
-    background: var(--color-dark);
-    color: var(--color-text);
+    border: 1px solid var(--color-offset-1);
+    background: var(--color-offset-1);
+    color: var(--color-main);
 }
 
 #config_name {
