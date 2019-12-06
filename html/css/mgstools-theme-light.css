@@ -13,7 +13,7 @@ where the components are loaded.
     --locked-lock-btn-background: no-repeat center/100% url('/html/img/icon-unlock.png');
 }
 
-/* dark theme: */
+/* light theme: */
 html {
 --color-main: #fff;
 --color-text: #010101;
