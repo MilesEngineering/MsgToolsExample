@@ -8,19 +8,23 @@
         <link type="text/css" rel="stylesheet" href="./css/bootstrap.min.css" />
         <link type="text/css" rel="stylesheet" href="./goldenlayout/goldenlayout-base.css" />
 
-        <!-- To set a light or dark theme, load the correct css and add 'light' or 'dark' as a body class -->
-        <link type="text/css" rel="stylesheet" href="./goldenlayout/goldenlayout-dark-theme.css" />
-        <link type="text/css" rel="stylesheet" href="./css/mgstools-theme-dark.css" />
+        <!-- To set a light or dark theme, load the correct goldenlayout css and add 'light' or 'dark' as a body class -->
+        <link type="text/css" rel="stylesheet" href="./goldenlayout/goldenlayout-light-theme.css" />
+        <link type="text/css" rel="stylesheet" href="./css/mgstools-theme.css" />
         <!-- <link type="text/css" rel="stylesheet" href="./goldenlayout/goldenlayout-light-theme.css" /> -->
-        <!-- <link type="text/css" rel="stylesheet" href="./css/mgstools-theme-light.css" /> -->
     </head>
-    <body class="dark">
+    <body class="light">
         <div class="container-fluid">
             <div class="row">
                 <nav>
                     <div class="dropdown-container menu">
                         <a class="button menu" id="menu_toggle_trigger" target="menu_toggle">
-                            <img src="../html/img/menu-icon.svg" alt="menu">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="40" height="40">
+                                <path class="background" d="M64 14A50 50 0 1 0 64 114 50 50 0 1 0 64 14Z"/>
+                                <path d="M64 117c-29.2 0-53-23.8-53-53s23.8-53 53-53 53 23.8 53 53S93.2 117 64 117zM64 17c-25.9 0-47 21.1-47 47s21.1 47 47 47 47-21.1 47-47S89.9 17 64 17z" class="a"/>
+                                <path d="M86.5 52h-45c-1.7 0-3-1.3-3-3s1.3-3 3-3h45c1.7 0 3 1.3 3 3S88.2 52 86.5 52zM86.5 67h-45c-1.7 0-3-1.3-3-3s1.3-3 3-3h45c1.7 0 3 1.3 3 3S88.2 67 86.5 67z" class="a"/>
+                                <path d="M86.5 82h-45c-1.7 0-3-1.3-3-3s1.3-3 3-3h45c1.7 0 3 1.3 3 3S88.2 82 86.5 82z" class="a"/>
+                            </svg>
                         </a>
                         <div class="dropdown closed" id="menu_toggle">
                             <button type="button" name="button" class="btn" id="lock_btn">Lock</button>

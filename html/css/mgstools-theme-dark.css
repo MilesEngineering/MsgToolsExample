@@ -101,6 +101,14 @@ nav {
     justify-content: flex-start;
 }
 
+nav svg path {
+    fill: var(--color-text);
+}
+
+nav svg path.background {
+    fill: var(--color-main);
+}
+
 nav > .dropdown-container > .button {
     margin-right: 15px;
 }
