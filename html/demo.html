@@ -53,6 +53,18 @@
             </div>
         </div>
     </body>
+    <script>
+        // Switching themes
+        jQuery('.theme-switch input').change(function(){
+            if(jQuery('body').hasClass('dark')){
+                jQuery('body').removeClass('dark').addClass('light');
+                jQuery('link[href="./goldenlayout/goldenlayout-dark-theme.css"]').attr('href', './goldenlayout/goldenlayout-light-theme.css')
+            } else {
+                jQuery('body').removeClass('light').addClass('dark');
+                jQuery('link[href="./goldenlayout/goldenlayout-light-theme.css"]').attr('href', './goldenlayout/goldenlayout-dark-theme.css')
+            }
+        });
+    </script>
     <script type="text/javascript" src="./msgtools/Settings.js" ></script>
     <script type="text/javascript" src="./webdav/webdav.js" ></script>
     <script type="text/javascript" src="./msgtools/SettingsStorage.js" ></script>
