@@ -9,7 +9,7 @@ where the components are loaded.
 body.light {
     --color-main: #fff;
     --color-text: #010101;
-    --color-offset-1: #acdbdf;
+    --color-offset-1: #76C1D1;
     --color-offset-2: #69779b;
     --color-border: #333333;
     --color-shadow: #ccc;
@@ -19,7 +19,7 @@ body.dark {
     --color-main: #010101; /* nearly black*/
     --color-text: #f0ece2;
     --color-offset-1: #acdbdf;
-    --color-offset-2: #69779b;
+    --color-offset-2: #FE7773;
     --color-border: #333333;
     --color-shadow: #000;
 }
@@ -197,6 +197,11 @@ nav > .dropdown-container > .button {
     color: var(--color-text);
 }
 
+.dark #menu_toggle button:hover,
+.dark #menu_toggle button:focus {
+    color: var(--color-main);
+}
+
 #config_name {
     margin: 11px 0 0 45px;
 }
@@ -208,11 +213,12 @@ nav > .dropdown-container > .button {
     display: flex;
     align-items: center;
 }
+
 .switch {
   position: relative;
   display: inline-block;
-  width: 60px;
-  height: 34px;
+  width: 50px;
+  height: 30px;
   margin-left: 15px;
 
 }
@@ -238,8 +244,8 @@ nav > .dropdown-container > .button {
 .slider:before {
   position: absolute;
   content: "";
-  height: 26px;
-  width: 26px;
+  height: 22px;
+  width: 22px;
   left: 4px;
   bottom: 4px;
   background-color: white;
@@ -248,7 +254,7 @@ nav > .dropdown-container > .button {
 }
 
 input:checked + .slider {
-  background-color: #2196F3;
+  background-color: #76C1D1;
 }
 
 input:focus + .slider {
@@ -256,9 +262,9 @@ input:focus + .slider {
 }
 
 input:checked + .slider:before {
-  -webkit-transform: translateX(26px);
-  -ms-transform: translateX(26px);
-  transform: translateX(26px);
+  -webkit-transform: translateX(20px);
+  -ms-transform: translateX(20px);
+  transform: translateX(20px);
 }
 
 /* Rounded sliders */
@@ -283,7 +289,7 @@ input:checked + .slider:before {
     --color-dark-contrast:;
     --color-dark-contrast-2:;
     --color-light-contrast: var(--color-text);
-    --color-alert: var(--color-offset-2);
+    --color-alert: var(--color-offset-1);
     --color-text:;
     --background-color: var(--color-main);
     --color: var(--color-text);
@@ -306,7 +312,7 @@ input:checked + .slider:before {
     --btn-radius: 4px;
 
     /*  Form components */
-    --input-margin: .2em .5em .7em 0;
+    --input-margin: .2em .5em .3em 0;
     --input-height:;
     --input-background: var(--color-main);
     --input-color: var(--color-text);
@@ -327,4 +333,8 @@ input:checked + .slider:before {
    --tab-button-border-hover:;
    --wrapper-padding:;
    --wrapper-border:;
+}
+
+.dark .msgtools-component {
+    --color-alert: var(--color-offset-2);
 }
