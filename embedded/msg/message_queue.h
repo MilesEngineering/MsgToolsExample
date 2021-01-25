@@ -13,6 +13,8 @@ class MessageQueue
         MessageQueue(int count=DEFAULT_QUEUE_LEN);
         MessageBuffer* get(TickType_t waitTime=0);
         void put(MessageBuffer* msg);
+        void put(Message& msg);
+        void wake();
     private:
         QueueHandle_t m_msgQueue;
 };

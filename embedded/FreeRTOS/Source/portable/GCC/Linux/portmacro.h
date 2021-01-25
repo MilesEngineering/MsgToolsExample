@@ -180,6 +180,12 @@ extern void vPortAddTaskHandle( void *pxTaskHandle );
 #define SIG_TICK					SIGPROF
 #define TIMER_TYPE					ITIMER_PROF */
 
+
+portINLINE static BaseType_t xPortIsInsideInterrupt( void )
+{
+    return pdFALSE;
+}
+
 #ifdef __cplusplus
 }
 #endif

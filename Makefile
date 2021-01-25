@@ -31,7 +31,7 @@ matlab:
 
 html:
 	msgparser messages obj/CodeGenerator/Html html
-	@find obj/CodeGenerator/Html -type d -print0 | xargs -n 1 -0 cp html/bootstrap.min.css
+	@find obj/CodeGenerator/Html -type d -print0 | xargs -n 1 -0 cp html/css/bootstrap.min.css
 
 check: obj/CodeGenerator/MsgDigest.txt
 

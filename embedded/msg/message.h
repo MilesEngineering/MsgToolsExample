@@ -12,9 +12,6 @@
 #include <atomic>
 #endif
 
-#include <iostream>
-using namespace std;
-
 class MessagePool;
 
 // This holds the contents of a message, including:
@@ -53,11 +50,19 @@ class Message
 		bool Exists();
         void      SetMessageID(MessageIdType id);
         void      SetDataLength(uint16_t len);
+        void      SetSource(int source);
+        void      SetDestination(int dest);
+        void      SetPriority(int prio);
         void      SetTime(TimeType time);
+
 		MessageIdType GetMessageID() const;
 		int       GetDataLength() const;
         uint8_t*  GetDataPointer() const;
         int       GetTotalLength() const;
+        int       GetSource() const;
+        int       GetDestination() const;
+        int       GetPriority() const;
+        TimeType  GetTime() const;
 	protected:
 		MessageBuffer* m_buf;
         // auto-generated code wants 'm_data' to exist!

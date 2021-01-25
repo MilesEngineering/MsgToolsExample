@@ -1,2 +1,5 @@
 obj
 .DS_Store
+embedded/gcc-arm-none-eabi/
+embedded/eclipse/
+embedded/.vscode/

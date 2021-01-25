@@ -2,19 +2,25 @@ Messages:
   - Name: CANHeader
     Description: Header for messages sent over the CANbus
     Fields:
-      - Name: Source
-        Type: uint8
-        Default: 0
-      - Name: Destination
-        Type: uint8
-        Default: 0
-      - Name: ID
-        Type: uint16
-        Default: 0
-        IDBits: 16
-      - Name: Length
-        Type: uint16
-        Default: 0
-      - Name: Priority
-        Type: uint8
-        Default: 0
+      - Name: CanID
+        Type: uint32
+        Units: ""
+        Description: 29-bit Extended CAN Packet ID
+        Bitfields:
+            - Name: Priority
+              NumBits: 2
+              Default: 0
+            - Name: ID
+              NumBits: 11
+              Default: 0
+              IDBits: 11
+            - Name: Source
+              NumBits: 6
+              Default: 0
+            - Name: Destination
+              NumBits: 6
+              Default: 0
+            - Name: LengthDecrement
+              NumBits: 4
+              Default: 0
+              
