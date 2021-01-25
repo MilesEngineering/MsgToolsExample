@@ -11,10 +11,12 @@ class MessagePool
     public:
         MessagePool(uint8_t* buffer, int count, int size);
         static MessagePool* CurrentPool();
+        static void SetInterruptContextPool(MessagePool& pool);
         MessageBuffer* Allocate(int size);
         void Free(MessageBuffer* msg);
     private:
         QueueHandle_t m_freeList;
+        static MessagePool* s_interruptContextPool;
 };
 
 #endif

@@ -2,7 +2,9 @@
 #define __FIELD_ACCESS_H__
 
 #define INLINE inline
+#ifndef UNUSED
 #define UNUSED (void)
+#endif
 
 #define Get_int8_t(location) FieldAccess::GetField<int8_t>(location)
 #define Get_int16_t(location) FieldAccess::GetField<int16_t>(location)

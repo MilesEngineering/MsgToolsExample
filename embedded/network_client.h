@@ -85,7 +85,7 @@ class NetworkClient : public MessageClient
             {
                 m_buf = GetMessagePool()->Allocate(0);
                 if(m_buf == 0)
-                    cout << "Alloc returned NULL!" << endl;
+                    printf("Alloc returned NULL!\n");
             }
             if(m_buf)
             {

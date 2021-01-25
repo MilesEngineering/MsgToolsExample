@@ -1,12 +1,13 @@
 #ifndef MESSAGE_BUS_H
 #define MESSAGE_BUS_H
 
+//# Need to undef these before including <map>
+#undef min
+#undef max
+
 //# Either from STL, or ETL: https://www.etlcpp.com/map.html
 #include <map>
 #include <vector>
-
-#include <iostream>
-using namespace std;
 
 class MessageBus
 {
@@ -36,7 +37,7 @@ class MessageBus
             {
                 return;
             }
-            //cout << "sub count = " << subcount << endl;
+            //printf("sub count = %d\n");
             
             // See who subscribed to it, and give it to them.
             int i=0;
@@ -60,14 +61,27 @@ class MessageBus
     private:
         static void DeliverToClient(MessageClient* c, Message& msg, bool last)
         {
+#ifdef MSG_REFERENCE_COUNTING
             if(last)
             {
                 c->DeliverMessage(msg);
             }
             else
+#else
+            UNUSED(last);
+#endif
             {
                 Message clonedMsg(msg);
-                c->DeliverMessage(clonedMsg);
+                //# error counter?
+                if(clonedMsg.Exists())
+                {
+                    c->DeliverMessage(clonedMsg);
+#ifndef MSG_REFERENCE_COUNTING
+                    //# since we sent a copy of the cloned message, the recipient owns it now,
+                    //# and we need to make sure we don't free it here.
+                    clonedMsg.m_buf = nullptr;
+#endif
+                }
             }
         }
         std::multimap<MessageIdType, MessageClient*> m_subscriptions;

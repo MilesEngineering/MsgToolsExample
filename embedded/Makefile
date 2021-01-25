@@ -1,7 +1,8 @@
 ALL_BUILD_SPECS := Linux
-BUILD_SPEC := Linux
 
 TARGET := example_app
-SRC := main.cpp
+SRC := \
+    main.cpp \
+    console.cpp
 
-include mk/freertos.mk
+include mk/common.mk

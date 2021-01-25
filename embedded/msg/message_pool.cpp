@@ -2,9 +2,9 @@
 
 #include "queue.h"
 #include "message_client.h"
+#include "stdio.h"
 
-#include <iostream>
-using namespace std;
+MessagePool* MessagePool::s_interruptContextPool = 0;
 
 MessagePool::MessagePool(uint8_t* buffer, int count, int size)
 {
@@ -24,16 +24,38 @@ MessagePool::MessagePool(uint8_t* buffer, int count, int size)
         Free(msg);
     }
 }
+void MessagePool::SetInterruptContextPool(MessagePool& pool)
+{
+    s_interruptContextPool = &pool;
+}
+
 MessagePool* MessagePool::CurrentPool()
 {
-    return MessageClient::CurrentClient()->GetMessagePool();
+    if(xPortIsInsideInterrupt())
+    {
+        return s_interruptContextPool;
+    }
+    MessageClient* currentClient = MessageClient::CurrentClient();
+    if(currentClient)
+    {
+        return currentClient->GetMessagePool();
+    }
+    printf("%s line %d, ERROR!  No current client defined!\n", __FILE__, __LINE__);
+    return nullptr;
 }
 MessageBuffer* MessagePool::Allocate(int size)
 {
     UNUSED(size);
     MessageBuffer* msg=0;
     //int old_len = uxQueueMessagesWaiting(m_freeList);
-    xQueueReceive(m_freeList, (void*)&msg, 0);
+    if(xPortIsInsideInterrupt())
+    {
+        xQueueReceiveFromISR(m_freeList, (void*)&msg, 0); //# do i need &xHigherPriorityTaskWoken?
+    }
+    else
+    {
+        xQueueReceive(m_freeList, (void*)&msg, 0);
+    }
 #ifdef MSG_REFERENCE_COUNTING
     if(msg)
     {
@@ -45,11 +67,10 @@ MessageBuffer* MessagePool::Allocate(int size)
 #endif
     if(msg && size > msg->m_bufferSize)
     {
-        cout << "ERROR!  Can't allocate " << size << " byte buffer, max size is " << msg->m_bufferSize << endl;
+        printf("ERROR!  Can't allocate %d byte buffer, max size is %d\n", size, msg->m_bufferSize);
         Free(msg);
         return 0;
     }
-    //cout << "MessagePool::Allocate(" << msg << ") success with " <<old_len << "->" << uxQueueMessagesWaiting(m_freeList) << " len queue" << endl;
     return msg;
 }
 void MessagePool::Free(MessageBuffer* msg)
@@ -58,21 +79,39 @@ void MessagePool::Free(MessageBuffer* msg)
     if (msg->decrement_refcount() == 1)
 #endif
     {
-        //int old_len = uxQueueMessagesWaiting(m_freeList);
-        BaseType_t ret = xQueueSend(m_freeList, (void*)&msg, 0);
-        if(!ret)
+        int old_len;
+        BaseType_t ret;
+        if(xPortIsInsideInterrupt())
         {
-            //cout << "MessagePool::Free(" << msg << ") FAIL with " <<old_len << "->" << uxQueueMessagesWaiting(m_freeList) << " len queue" << endl;
-            while(uxQueueMessagesWaiting(m_freeList) > 0)
-            {
-                MessageBuffer* buf = Allocate(1);
-                cout << "Had " << buf << " in queue" << endl;
-            }
-            configASSERT(false);
+            old_len = uxQueueMessagesWaitingFromISR(m_freeList);
+            ret = xQueueSendFromISR(m_freeList, (void*)&msg, 0); //# do i need &xHigherPriorityTaskWoken?
         }
         else
         {
-            //cout << "MessagePool::Free(" << msg << ") success with " <<old_len << "->" << uxQueueMessagesWaiting(m_freeList) << " len queue" << endl;
+            old_len = uxQueueMessagesWaiting(m_freeList);
+            ret = xQueueSend(m_freeList, (void*)&msg, 0);
+        }
+        if(!ret)
+        {
+            int new_len;
+            if(xPortIsInsideInterrupt())
+            {
+                new_len = uxQueueMessagesWaitingFromISR(m_freeList);
+            }
+            else
+            {
+                new_len = uxQueueMessagesWaiting(m_freeList);
+            }
+            printf("MessagePool::Free(%p) FAIL with %d->%d len queue\n", (void*)msg, old_len, new_len);
+            if(!xPortIsInsideInterrupt())
+            {
+                while(uxQueueMessagesWaiting(m_freeList) > 0)
+                {
+                    MessageBuffer* buf = Allocate(1);
+                    printf("Had %p in queue", (void*)buf);
+                }
+            }
+            configASSERT(false);
         }
     }
 }
