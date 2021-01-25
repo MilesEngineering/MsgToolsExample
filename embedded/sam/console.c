@@ -1,4 +1,4 @@
-#ifdef BUILD_SPEC_samv71
+#ifdef BUILD_SPEC_sam
 #include "services/ioport/ioport.h"
 #include "status_codes.h"
 #include "services/serial/sam_uart/uart_serial.h"

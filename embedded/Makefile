@@ -4,13 +4,15 @@ SAM_VARIANT := same70
 
 TARGET := example_app
 SRC := \
-    main.cpp \
-    console.cpp
+    main.cpp                     \
+    freertos_fault_handlers.cpp
 
 ifneq (,$(findstring sam,$(BUILD_SPEC)))
 SRC += \
-    sam/serial_client.cpp \
-    sam/can_client.cpp
+    sam/console.cpp           \
+    sam/serial_client.cpp     \
+    sam/can_client.cpp        \
+    sam/fault_handlers.cpp 
 
 # uncomment this to enable USB CDC
 include mk/sam.usb.mk

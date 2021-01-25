@@ -9,12 +9,11 @@
 #include "TestCase4.h"
 #include <math.h>
 
-#include "console.h"
-
 #ifdef BUILD_SPEC_Linux
 #include "Linux/network_client.h"
 #endif
-#ifdef BUILD_SPEC_samv71
+#ifdef BUILD_SPEC_sam
+#include "sam/console.h"
 #include "sam/serial_client.h"
 #include "sam/can_client.h"
 #include "services/ioport/ioport.h"
@@ -115,7 +114,7 @@ int main (void)
     //# Note: Do not declare anything on the stack in main!
     //# FreeRTOS repurposes the main stack for ISRs once the scheduler starts,
     //# and that will corrupt any variables declared on the stack here.
-#ifdef BUILD_SPEC_samv71
+#ifdef BUILD_SPEC_sam
 	/* Disable the watchdog */
 	WDT->WDT_MR = WDT_MR_WDDIS;
     //# Unclear what may break if Instruction or Data caches are enabled.
@@ -167,7 +166,7 @@ int main (void)
 #ifdef BUILD_SPEC_Linux
     static NetworkClient nc(mp);
 #endif
-#ifdef BUILD_SPEC_samv71
+#ifdef BUILD_SPEC_sam
     //static SerialClient* sc = UsartClient::Usart0(&mp);
     static UsbCdcClient* usb = UsbCdcClient::Instance(&mp);
     static CanClient* can = CanClient::Can1(&mp);
@@ -176,42 +175,3 @@ int main (void)
     vTaskStartScheduler();
     return 0;
 }
-
-extern "C" void vAssertCalled( unsigned long ulLine, const char * const pcFileName )
-{
-    printf("ASSERT: %s : %d\n", pcFileName, (int)ulLine);
-    while(1);
-}
-
-extern "C" void vApplicationMallocFailedHook(void)
-{
-    printf("vApplicationMallocFailedHook\n");
-	while(1);
-}
-
-extern "C" void vApplicationStackOverflowHook( TaskHandle_t pxTask, char *pcTaskName )
-{
-	( void ) pcTaskName;
-	( void ) pxTask;
-
-	/* Run time stack overflow checking is performed if
-	configCHECK_FOR_STACK_OVERFLOW is defined to 1 or 2.  This hook
-	function is called if a stack overflow is detected. */
-
-	/* Force an assert. */
-	configASSERT( ( volatile void * ) NULL );
-}
-
-#ifdef BUILD_SPEC_samv71
-extern "C" void HardFault_Handler(void)
-{
-    while(1) {
-        #pragma GCC diagnostic ignored "-Wunused-variable"
-        volatile uint32_t ipsr = __get_IPSR();
-        #pragma GCC diagnostic ignored "-Wunused-variable"
-        volatile uint32_t msp = __get_MSP();
-        #pragma GCC diagnostic ignored "-Wunused-variable"
-        volatile uint32_t psp = __get_PSP();
-    }
-}
-#endif
