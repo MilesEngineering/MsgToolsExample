@@ -8,7 +8,6 @@
 #include "TestCase2.h"
 #include "TestCase4.h"
 #include <math.h>
-
 #ifdef BUILD_SPEC_Linux
 #include "Linux/network_client.h"
 #endif
@@ -18,8 +17,9 @@
 #include "sam/can_client.h"
 #include "services/ioport/ioport.h"
 #endif
-
 #include <inttypes.h>
+#include "debug_printf.h"
+#define ESCAPED_FILE_PATH __main
 
 //# should probably move to a new file, tick.cpp
 TickType_t GetTickCount()
@@ -58,9 +58,7 @@ class TestClient1 : public MessageClient
         void HandleReceivedMessage(Message& msg)
         {
             UNUSED(msg);
-#ifdef BUILD_SPEC_Linux
-            printf("  TC1 got %" PRId32 " at time %" PRId32 "\n", msg.GetMessageID(), xTaskGetTickCount());
-#endif
+            debugPrintf("  TC1 got %d at time %d\n", (int)msg.GetMessageID(), (int)xTaskGetTickCount());
         }
         void PeriodicTask()
         {
@@ -69,9 +67,7 @@ class TestClient1 : public MessageClient
             if(tcm.Exists())
             {
                 tcm.SetA(xTaskGetTickCount());
-#ifdef BUILD_SPEC_Linux
-                printf("TC1 sending MessageID %" PRId32 " at time %" PRId32 "\n",tcm.GetMessageID(),xTaskGetTickCount());
-#endif
+                debugPrintf("TC1 sending MessageID %d at time %d\n",(int)tcm.GetMessageID(),(int)xTaskGetTickCount());
                 SendMessage(tcm);
             }
         }
@@ -89,17 +85,15 @@ class TestClient2 : public MessageClient
         }
         void HandleReceivedMessage(Message& msg)
         {
-#ifdef BUILD_SPEC_Linux
             switch(msg.GetMessageID())
             {
                 case TestCase4Message::MSG_ID:
-                    printf("  TC2 got TestCase4 Message  at time %" PRId32 "\n", xTaskGetTickCount());
+                    debugPrintf("  TC2 got TestCase4 Message  at time %d\n", (int)xTaskGetTickCount());
                     break;
                 default:
-                    printf("  TC2 got %" PRId32 " at time %" PRId32 "\n", msg.GetMessageID(), xTaskGetTickCount());
+                    debugPrintf("  TC2 got %d at time %d\n", (int)msg.GetMessageID(), (int)xTaskGetTickCount());
                     break;
             }
-#endif
         }
         void PeriodicTask()
         {
