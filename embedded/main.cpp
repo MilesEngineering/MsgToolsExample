@@ -1,10 +1,11 @@
 #include "FreeRTOS.h"
-#include "task.h"
+#include "tick.h"
 #include "message_client.h"
 #include "message_bus.h"
 #include "message.h"
 #include "message_pool.h"
 #include "message_queue.h"
+#include "debug_server.h"
 #include "TestCase2.h"
 #include "TestCase4.h"
 #include <math.h>
@@ -21,28 +22,22 @@
 #include "debug_printf.h"
 #define ESCAPED_FILE_PATH __main
 
-//# should probably move to a new file, tick.cpp
-TickType_t GetTickCount()
-{
-    if(xPortIsInsideInterrupt())
-    {
-        return xTaskGetTickCountFromISR();
-    }
-    return xTaskGetTickCount();
-}
-
 // Make a pool of buffers to be used by all clients.
 #ifdef MSG_REFERENCE_COUNTING
-#define POOL_SIZE    4
+#define POOL_BUF_COUNT    4
 #else
-#define POOL_SIZE    16
+#define POOL_BUF_COUNT    16
 #endif
 //# This is way bigger than CAN-FD packet size.
 //# Either shrink it to 64, or implement fragmentation/reassembly on CAN-FD.
-#define POOL_BUF_LEN 128
+#define POOL_BUF_SIZE (128)
 
-uint8_t buf[POOL_SIZE*POOL_BUF_LEN];
-MessagePool mp(buf, POOL_SIZE, POOL_BUF_LEN);
+//# Tried making the message pools be 128+overhead, and MCU either crashes or
+//# no print statements come out of stdout.  Haven't been able to get debugger
+//# to connect to debug it.
+//#define POOL_BUF_SIZE (offsetof(MessageBuffer, m_data) + 128)
+
+MessagePoolWithStorage<POOL_BUF_SIZE, POOL_BUF_COUNT> mp;
 
 
 // An example client that sends a test messages periodically
@@ -58,7 +53,7 @@ class TestClient1 : public MessageClient
         void HandleReceivedMessage(Message& msg)
         {
             UNUSED(msg);
-            debugPrintf("  TC1 got %d at time %d\n", (int)msg.GetMessageID(), (int)xTaskGetTickCount());
+            debugPrintf("TC1 got %d at time %d\n", (int)msg.GetMessageID(), (int)GetTickCount());
         }
         void PeriodicTask()
         {
@@ -66,8 +61,8 @@ class TestClient1 : public MessageClient
             TestCase4Message tcm;
             if(tcm.Exists())
             {
-                tcm.SetA(xTaskGetTickCount());
-                debugPrintf("TC1 sending MessageID %d at time %d\n",(int)tcm.GetMessageID(),(int)xTaskGetTickCount());
+                tcm.SetA(GetTickCount());
+                debugPrintf("TC1 sending MessageID %d at time %d\n",(int)tcm.GetMessageID(),(int)GetTickCount());
                 SendMessage(tcm);
             }
         }
@@ -88,17 +83,17 @@ class TestClient2 : public MessageClient
             switch(msg.GetMessageID())
             {
                 case TestCase4Message::MSG_ID:
-                    debugPrintf("  TC2 got TestCase4 Message  at time %d\n", (int)xTaskGetTickCount());
+                    debugPrintf("TC2 got TestCase4 Message  at time %d\n", (int)GetTickCount());
                     break;
                 default:
-                    debugPrintf("  TC2 got %d at time %d\n", (int)msg.GetMessageID(), (int)xTaskGetTickCount());
+                    debugPrintf("TC2 got %d at time %d\n", (int)msg.GetMessageID(), (int)GetTickCount());
                     break;
             }
         }
         void PeriodicTask()
         {
 #ifdef BUILD_SPEC_Linux
-            printf(">>>> TC2.PeriodicTask() at time %" PRId32 "\n", xTaskGetTickCount());
+            printf(">>>> TC2.PeriodicTask() at time %" PRId32 "\n", GetTickCount());
 #endif
         }
 };
@@ -155,6 +150,7 @@ int main (void)
     printf("\n\nMsgTools embedded example application.\n\n");
     
     MessagePool::SetInterruptContextPool(mp);
+    static DebugServer dbs;
     static TestClient1 tc1(mp);
     static TestClient2 tc2(mp);
 #ifdef BUILD_SPEC_Linux
