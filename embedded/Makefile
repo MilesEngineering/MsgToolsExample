@@ -8,7 +8,9 @@ SRC := \
     ucplatform/tick.cpp          \
     ucplatform/debug_server.cpp  \
     ucplatform/debug_printf.cpp  \
-    ucplatform/freertos_fault_handlers.cpp
+    ucplatform/freertos_fault_handlers.cpp \
+    ucplatform/rtt/RTT/SEGGER_RTT.c        \
+    ucplatform/rtt/RTT/SEGGER_RTT_printf.c
 
 ifeq (sam,$(BUILD_SPEC))
 SRC += \
