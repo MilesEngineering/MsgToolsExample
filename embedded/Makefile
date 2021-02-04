@@ -1,26 +1,9 @@
-ALL_BUILD_SPECS := Linux sam
-BUILD_SPEC := sam
-SAM_VARIANT := same70
+TOPTARGETS := build_all clean_all clobber_all
 
-TARGET := example_app
-SRC := \
-    main.cpp                     \
-    ucplatform/tick.cpp          \
-    ucplatform/debug_server.cpp  \
-    ucplatform/debug_printf.cpp  \
-    ucplatform/freertos_fault_handlers.cpp \
-    ucplatform/rtt/RTT/SEGGER_RTT.c        \
-    ucplatform/rtt/RTT/SEGGER_RTT_printf.c
+SUBDIRS := example_app can_gateway
 
-ifeq (sam,$(BUILD_SPEC))
-SRC += \
-    ucplatform/sam/console.c             \
-    ucplatform/sam/serial_client.cpp     \
-    ucplatform/sam/can_client.cpp        \
-    ucplatform/sam/fault_handlers.cpp 
+$(TOPTARGETS): $(SUBDIRS)
+$(SUBDIRS):
+	@$(MAKE) -C $@ $(MAKECMDGOALS)
 
-INCLUDE_SAM_USB_SUPPORT := true
-
-endif
-
-include ucplatform/mk/common.mk
+.PHONY: $(TOPTARGETS) $(SUBDIRS)
