@@ -24,17 +24,18 @@
 
 // Make a pool of buffers to be used by all clients.
 #ifdef MSG_REFERENCE_COUNTING
-#define POOL_BUF_COUNT    4
-#else
 #define POOL_BUF_COUNT    16
+#else
+#define POOL_BUF_COUNT    32
 #endif
 //# This is way bigger than CAN-FD packet size.
 //# Either shrink it to 64, or implement fragmentation/reassembly on CAN-FD.
 #define POOL_BUF_SIZE (128)
 
-//# Tried making the message pools be 128+overhead, and MCU either crashes or
-//# no print statements come out of stdout.  Haven't been able to get debugger
-//# to connect to debug it.
+//# Tried making the message pools be 128+overhead, but that seems to
+//# cause an unaligned memory access.  Ought to improve MessagePoolWithStorage
+//# internally so it accepts a message body size as a template parameter and
+//# pads as necessary to maintain alignment of the buffers.
 //#define POOL_BUF_SIZE (offsetof(MessageBuffer, m_data) + 128)
 
 MessagePoolWithStorage<POOL_BUF_SIZE, POOL_BUF_COUNT> mp;
@@ -93,7 +94,7 @@ class TestClient2 : public MessageClient
         void PeriodicTask()
         {
 #ifdef BUILD_SPEC_Linux
-            printf(">>>> TC2.PeriodicTask() at time %" PRId32 "\n", GetTickCount());
+            debugPrintf(">>>> TC2.PeriodicTask() at time %d\n", GetTickCount());
 #endif
         }
 };
@@ -150,7 +151,7 @@ int main (void)
     printf("\n\nMsgTools embedded example application.\n\n");
     
     MessagePool::SetInterruptContextPool(mp);
-    static DebugServer dbs;
+    static DebugServer dbs("ExampleApp");
     static TestClient1 tc1(mp);
     static TestClient2 tc2(mp);
 #ifdef BUILD_SPEC_Linux

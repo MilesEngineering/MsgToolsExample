@@ -1,0 +1,121 @@
+Enums:
+  - Name: Priorities
+    Options:
+      - Name: Chatter
+        Value: 0
+      - Name: Info
+        Value: 1
+      - Name: Warning
+        Value: 2
+      - Name: Error
+        Value: 3
+      - Name: Fatal
+        Value: 4
+Messages:
+  - Name: DeviceInfo
+    ID: 0xF0
+    Description: Information about debug info on a device
+    Alias: DebugDeviceInfo
+    Fields:
+      - Name: Name
+        Type: uint8
+        Count: 12
+        Units: ASCII
+        Description: The name of the device
+      - Name: DebugStringDictionaryID
+        Type: uint8
+        Count: 16
+        Description: The ID of the debug string dictionary for this device.
+  - Name: ThreadInfo
+    ID: 0xF1
+    Description: Information about a thread, including it's debug stream info
+    Alias: DebugStreamInfo
+    Fields:
+      - Name: ThreadID
+        Type: uint8
+        Units: PlatformSpecific
+        Description: Some sort of identifier for the stream printing the message.
+      - Name: ThreadName
+        Type: uint8
+        Count: 12
+        Units: ASCII
+        Description: The name of the thread
+      - Name: DebugThreshold
+        Type: uint8
+        Enum: Priorities
+      - Name: ThreadPriority
+        Type: int16
+      - Name: MsgRxCount
+        Type: uint16
+      - Name: MsgTxCount
+        Type: uint16
+      - Name: StackSize
+        Type: uint16
+      - Name: StackUsed
+        Type: uint16
+  - Name: Printf
+    ID: 0xF2
+    Description: Used to display debug information as strings.
+    Alias: DebugPrintf
+    Fields:
+      - Name: StreamID
+        Type: uint8
+        Units: PlatformSpecific
+        Description: Some sort of identifier for the stream printing the message.
+      - Name: Priority
+        Type: uint8
+        Enum: Priorities
+      - Name: LineNumber
+        Type: uint16
+        Units: NA
+        Description: The line number that caused the message to appear.
+      - Name: Buffer
+        Type: uint8
+        Count: 120
+        Units: ASCII
+        Description: The string to display.
+  - Name: PrintfID
+    ID: 0xF3
+    Description: Used to output debug information as a format string ID and arg list.
+    Alias: DebugPrintfID
+    Fields:
+      - Name: StreamID
+        Type: uint8
+        Units: PlatformSpecific
+        Description: Some sort of identifier for the stream printing the message.
+      - Name: Priority
+        Type: uint8
+        Enum: Priorities
+      - Name: FormatStringID
+        Type: uint32
+        Units: NA
+        Description: The unique ID of the format string.
+      - Name: Parameters
+        Type: uint32
+        Count: 8
+        Description: The arguments to use for string formatting
+  - Name: GetDeviceInfo
+    ID: 0xF4
+    Description: Information about debug info on a device
+    Alias: GetDeviceDebugInfo
+  - Name: GetThreadInfo
+    ID: 0xF5
+    Description: Information about a thread, including it's debug stream info
+    Alias: GetStreamDebugInfo
+    Fields:
+      - Name: ThreadID
+        Type: uint8
+        Units: PlatformSpecific
+        Description: Some sort of identifier for the stream printing the message.
+  - Name: SetDebugThreshold
+    ID: 0xF6
+    Description: Used to set threshold for debug output
+    Alias: SetDebugThreshold
+    Fields:
+      - Name: StreamID
+        Type: uint8
+        Units: PlatformSpecific
+        Description: Some sort of identifier for the stream printing the message.
+      - Name: DebugThreshold
+        Type: uint8
+        Enum: Priorities
