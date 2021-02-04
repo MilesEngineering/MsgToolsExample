@@ -3,3 +3,5 @@ obj
 embedded/gcc-arm-none-eabi/
 embedded/eclipse/
 embedded/.vscode/
+*.jdebug
+*.jdebug.user
