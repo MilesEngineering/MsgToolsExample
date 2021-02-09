@@ -1,4 +1,4 @@
-all:: check cpp c dart python java js kotlin swift matlab html
+all:: check cpp c dart python java js kotlin swift matlab simulink html
 
 .PHONY: python cpp c java js kotlin swift matlab html check
 
@@ -28,6 +28,12 @@ swift:
 
 matlab:
 	msgparser messages obj/CodeGenerator/Matlab/+Messages matlab
+
+simulink:
+	msgparser messages obj/CodeGenerator/Simulink/+Messages simulink -t InputTemplate.cpp
+	msgparser messages obj/CodeGenerator/Simulink/+Messages simulink -t OutputTemplate.cpp
+	msgparser messages obj/CodeGenerator/Simulink/+Messages simulink -t InputTemplate.m
+	msgparser messages obj/CodeGenerator/Simulink/+Messages simulink -t OutputTemplate.m
 
 html:
 	msgparser messages obj/CodeGenerator/Html html
