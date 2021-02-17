@@ -119,3 +119,21 @@ Messages:
       - Name: DebugThreshold
         Type: uint8
         Enum: Priorities
+  - Name: TextCommand
+    Alias: MsgText.Command
+    ID: 0xA1
+    Description: Used to send text commands to hardware.
+    Fields:
+      - Name: Buffer
+        Type: uint8
+        Count: 120
+        Units: ASCII
+  - Name: TextResponse
+    Alias: MsgText.Response
+    ID: 0xA2
+    Description: Used to send text commands to hardware.
+    Fields:
+      - Name: Buffer
+        Type: uint8
+        Count: 120
+        Units: ASCII
