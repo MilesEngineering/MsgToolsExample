@@ -30,10 +30,7 @@ matlab:
 	msgparser messages obj/CodeGenerator/Matlab/+Messages matlab
 
 simulink:
-	msgparser messages obj/CodeGenerator/Simulink/+Messages simulink -t InputTemplate.cpp
-	msgparser messages obj/CodeGenerator/Simulink/+Messages simulink -t OutputTemplate.cpp
-	msgparser messages obj/CodeGenerator/Simulink/+Messages simulink -t InputTemplate.m
-	msgparser messages obj/CodeGenerator/Simulink/+Messages simulink -t OutputTemplate.m
+	msgparser messages obj/CodeGenerator/Simulink/+Messages simulink
 
 html:
 	msgparser messages obj/CodeGenerator/Html html
