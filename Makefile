@@ -1,6 +1,6 @@
 all:: check cpp c dart python java js kotlin swift matlab simulink html
 
-.PHONY: python cpp c java js kotlin swift matlab html check
+.PHONY: python cpp c java js kotlin swift matlab simulink html check
 
 python:
 	msgparser messages obj/CodeGenerator/Python python
