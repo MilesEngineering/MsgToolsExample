@@ -19,12 +19,6 @@
 //# Either shrink it to 64, or implement fragmentation/reassembly on CAN-FD.
 #define POOL_BUF_SIZE (128)
 
-//# Tried making the message pools be 128+overhead, but that seems to
-//# cause an unaligned memory access.  Ought to improve MessagePoolWithStorage
-//# internally so it accepts a message body size as a template parameter and
-//# pads as necessary to maintain alignment of the buffers.
-//#define POOL_BUF_SIZE (offsetof(MessageBuffer, m_data) + 128)
-
 MessagePoolWithStorage<POOL_BUF_SIZE, POOL_BUF_COUNT> mp;
 
 

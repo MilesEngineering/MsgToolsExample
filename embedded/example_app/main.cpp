@@ -32,15 +32,6 @@
 //# Either shrink it to 64, or implement fragmentation/reassembly on CAN-FD.
 #define POOL_BUF_SIZE (128)
 
-//# Tried making the message pools be 128+overhead, but that seems to
-//# cause an unaligned memory access.  Ought to improve MessagePoolWithStorage
-//# internally so it accepts a message body size as a template parameter and
-//# pads as necessary to maintain alignment of the buffers.
-//#define POOL_BUF_SIZE (offsetof(MessageBuffer, m_data) + 128)
-
-MessagePoolWithStorage<POOL_BUF_SIZE, POOL_BUF_COUNT> mp;
-
-
 // An example client that sends a test messages periodically
 class TestClient1 : public MessageClient
 {
@@ -48,8 +39,8 @@ class TestClient1 : public MessageClient
         TestClient1(MessagePool& pool)
         : MessageClient("tc1", &pool, 500)
         {
-            MessageBus::Subscribe(this, TestCase4Message::MSG_ID);
-            MessageBus::Subscribe(this, TestCase2Message::MSG_ID);
+            MessageBus::Subscribe(this, MessageKey(TestCase4Message::MSG_ID));
+            MessageBus::Subscribe(this, MessageKey(TestCase2Message::MSG_ID));
         }
         void HandleReceivedMessage(Message& msg)
         {
@@ -150,6 +141,12 @@ int main (void)
 
     printf("\n\nMsgTools embedded example application.\n\n");
     
+    // Declare pool and clients here so their constructors happen at a predictable place
+    // versus global objects being constructed before main starts.
+    // Make them static so their memory usage is fixed in the memory map at build time,
+    // and because FreeRTOS intentionally discards the contents of the stack of main
+    // after vTaskStartScheduler().
+    static MessagePoolWithStorage<POOL_BUF_SIZE, POOL_BUF_COUNT> mp;
     MessagePool::SetInterruptContextPool(mp);
     static DebugServer dbs("ExampleApp");
     static TestClient1 tc1(mp);
