@@ -58,14 +58,19 @@ class TestClient1 : public MessageClient
                 SendMessage(tcm);
             }
         }
+        void Woken() override
+        {
+            debugPrintf("TC1 woken\n");
+        }
 };
 
 // an example client that receives messages, and also prints time every 5s
 class TestClient2 : public MessageClient
 {
     public:
-        TestClient2(MessagePool& pool)
-        : MessageClient("tc2", &pool, 5000)
+        TestClient2(MessagePool& pool, TestClient1& tc1)
+        : MessageClient("tc2", &pool, 1000),
+          m_tc1(tc1)
         {
             MessageBus::Subscribe(this, TestCase4Message::MSG_ID);
             MessageBus::Subscribe(this, TestCase2Message::MSG_ID);
@@ -87,7 +92,11 @@ class TestClient2 : public MessageClient
 #ifdef BUILD_SPEC_Linux
             debugPrintf(">>>> TC2.PeriodicTask() at time %d\n", GetTickCount());
 #endif
+            debugPrintf("TC2 Waking TC1\n");
+            m_tc1.Wake();
         }
+    private:
+        TestClient1& m_tc1;
 };
 
 int main (void)
@@ -150,7 +159,7 @@ int main (void)
     MessagePool::SetInterruptContextPool(mp);
     static DebugServer dbs("ExampleApp");
     static TestClient1 tc1(mp);
-    static TestClient2 tc2(mp);
+    static TestClient2 tc2(mp, tc1);
 #ifdef BUILD_SPEC_Linux
     static NetworkClient nc(mp);
 #endif
