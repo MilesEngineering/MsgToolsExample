@@ -57,12 +57,12 @@ bool MessageClient::OpenSocket()
     }
     printf("\n MessageClient::OpenSocket(), m_sock is open!! \n");
     {
-        ConnectMessage cm;
+        Network_ConnectMessage cm;
         strcpy((char*)cm.Name(), "Simulink");
         SendMessage(cm);
     }
     {
-        MaskedSubscriptionMessage subscribeMsg;
+        Network_MaskedSubscriptionMessage subscribeMsg;
         SendMessage(subscribeMsg);
     }
     return true;
