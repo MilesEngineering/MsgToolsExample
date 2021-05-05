@@ -282,8 +282,8 @@ input:checked + .slider:before {
 
 /* All msgtools component styling should be defined here in the scope of .msgtools-component */
 .msgtools-component {
-    --editable-lock-btn-background: no-repeat center/100% url('/html/img/icon-lock.png');
-    --locked-lock-btn-background: no-repeat center/100% url('/html/img/icon-unlock.png');
+    --editable-lock-btn-background: no-repeat center/100% url('/html/msgtools/style/icon-lock.png');
+    --locked-lock-btn-background: no-repeat center/100% url('/html/msgtools/style/icon-unlock.png');
     /* colors */
     --color-dark: var(--color-main);
     --color-dark-contrast:;
