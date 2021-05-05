@@ -5,12 +5,14 @@
         <script type="text/javascript" src="./goldenlayout/goldenlayout.min.js"></script>
         <script type="text/javascript" src="./msgtools/d3.v3.min.js"></script>
         <script type="text/javascript" src="./msgtools/msgtools.js"></script>
+        <script type="text/javascript" src="./msgtools/conversions.js"></script>
+        <script type="text/javascript" src="./msgtools/flo-poly.min.js"></script>
         <link type="text/css" rel="stylesheet" href="./css/bootstrap.min.css" />
         <link type="text/css" rel="stylesheet" href="./goldenlayout/goldenlayout-base.css" />
 
         <!-- To set a light or dark theme, load the correct goldenlayout css and add 'light' or 'dark' as a body class -->
         <link type="text/css" rel="stylesheet" href="./goldenlayout/goldenlayout-light-theme.css" />
-        <link type="text/css" rel="stylesheet" href="./css/mgstools-theme.css" />
+        <link type="text/css" rel="stylesheet" href="./css/msgtools-theme.css" />
         <!-- <link type="text/css" rel="stylesheet" href="./goldenlayout/goldenlayout-light-theme.css" /> -->
     </head>
     <body class="light">
@@ -27,7 +29,7 @@
                             </svg>
                         </a>
                         <div class="dropdown closed" id="menu_toggle">
-                            <button type="button" name="button" class="btn" id="lock_btn">Lock</button>
+                            <button type="button" name="button" class="btn" id="lock_btn" target="menu_toggle">Lock</button>
                         </div>
                     </div>
                     <div class="tab-container tabs" id="toolbar_container">
