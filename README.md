@@ -4,6 +4,9 @@ implement their own program using [MsgTools](https://github.com/MilesEngineering
 
 To learn more about MsgTools, [read the wiki](https://github.com/MilesEngineering/MsgTools/wiki).
 
+## The MsgTools Embedded Example App
+The MsgTools embedded example app is designed to run on a [SAMV71 eval board](https://www.microchip.com/Developmenttools/ProductDetails/DM320113), but also runs natively on a Linux development PC.
+
 ## The MsgTools Web App
 The MsgToolsExample web app uses [jQuery](https://jquery.com/), [Golden Layout](http://golden-layout.com/), [webDav](https://en.wikipedia.org/wiki/WebDAV), and [MsgTools](https://github.com/MilesEngineering/MsgTools/) to build a simple dashboard for sending, receiving, and visualizing messages.
 
@@ -14,13 +17,23 @@ is created in step 3 of 'Get up and running'.
 WebDAV is an Http extension that is used to be able to save, delete, and store
 GoldenLayout configurations on the server in the `html/configs` directory.
 
-## Get up and running
+## Get started
 
-1. `git clone --recursive` this repo
-2. `pip3 install wsgidav cheroot --user`
-3. `cd MsgToolsExample` and then run `make` to create the `obj` directory
-4. `cd html` and run `make` to run the webdav server
-5. Open a browser at [http://localhost:8000/html/demo.html](http://localhost:8000/html/demo.html)
+1. Clone this repo: `git clone --recursive git@github.com:MilesEngineering/MsgToolsExample.git`
+2. Install stuff
+  * `sudo apt-get install python3-pyqt5.qtwebsockets python3-pyqtgraph` # GUI tools as Ubuntu packages
+  * `sudo apt-get install gcc-multilib g++-multilib` # microcontroller build tools
+  * `pip3 install wsgidav cheroot --user` # dependencies for the webserver
+  * `pip3 install msgtools[gui] --user` # msgtools, with GUI option
+3. `cd MsgToolsExample` and then run `make` to build everything
+
+## Run some stuff to try it about
+
+1. run `msglauncher &`, then click to start msgserver and msgscope (or just run `msgserver &` and `msgscope &` from terminal)
+2. Web app
+  * `cd html` and run `make` to run the webdav server
+  *  Open a browser at [http://localhost:8000/html/demo.html](http://localhost:8000/html/demo.html)
+3. `./embedded/example_app/obj/Linux/example_app` to run the Linux example application.
 
 ## Development
 
@@ -40,7 +53,7 @@ directory is used to show how to implement embedded code using MsgTools.
 
 #### `MsgToolsExample/html/`
 
-Used to house the web app. 
+Used to house the web app.
 
 The base html file for this project is `demo.html` which pulls in all the
 necessary dependencies. The meat of the app is in the `/hmtl/msgtools` directory,
