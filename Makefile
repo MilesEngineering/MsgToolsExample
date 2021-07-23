@@ -54,3 +54,14 @@ save_expected_results:
 
 remove_timestamps:
 	find obj/ -type f | xargs sed -i -e 's/Created.*at.*from://'
+
+SUBDIRS := embedded
+
+TOPTARGETS := all clean clobber
+
+$(TOPTARGETS) :: $(SUBDIRS)
+$(SUBDIRS):
+	@$(MAKE) -C $@ $(MAKECMDGOALS)
+
+.PHONY: $(TOPTARGETS) $(SUBDIRS)
+
