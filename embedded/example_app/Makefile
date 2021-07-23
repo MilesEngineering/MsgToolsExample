@@ -1,5 +1,5 @@
 ALL_BUILD_SPECS := Linux sam
-BUILD_SPEC := sam
+BUILD_SPEC := Linux
 SAM_VARIANT := same70
 
 # switch this from ENABLE_DEBUG_SEGGER_RTT_STRINGS to ENABLE_DEBUG_SEGGER_RTT once we have PC-side support for that.
