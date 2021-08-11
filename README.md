@@ -27,7 +27,7 @@ GoldenLayout configurations on the server in the `html/configs` directory.
   * `pip3 install msgtools[gui] --user` # msgtools, with GUI option
 3. `cd MsgToolsExample` and then run `make` to build everything
 
-## Run some stuff to try it about
+## Run some stuff to try it out
 
 1. run `msglauncher &`, then click to start msgserver and msgscope (or just run `msgserver &` and `msgscope &` from terminal)
 2. Web app
