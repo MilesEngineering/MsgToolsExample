@@ -1,6 +1,6 @@
 [submodule "html/msgtools"]
 	path = html/msgtools
-	url = git@github.com:MilesEngineering/MsgToolsJS.git
+	url = ../MsgToolsJS.git
 [submodule "embedded/ucplatform"]
 	path = embedded/ucplatform
-	url = git@github.com:MilesEngineering/ucplatform.git
+	url = ../ucplatform.git
