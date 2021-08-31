@@ -6,21 +6,19 @@ function connectToServer() {
     client.connect(options);
 }
 console.log('start');
-msgtools.load('../obj/CodeGenerator/Javascript/', ['TextCommand',
+msgtools.load('../obj/CodeGenerator/Javascript/', ['BandwidthTest',
+                                                   'Debug',
+                                                   'Taxonomy.Canidae.Canis',
+                                                   'Taxonomy.Canidae.Dog',
+                                                   'Taxonomy.Canidae.Fox',
+                                                   'Taxonomy.Canidae.Vulpes',
+                                                   'Taxonomy.Canidae.Canidae',
+                                                   'Taxonomy.Canidae.AFox',
+                                                   'Taxonomy.Canidae.Wolf',
                                                    'TestCase3',
-                                                   'BandwidthTest',
-                                                   'TextResponse',
+                                                   'TestCaseConvert',
                                                    'TestCase4',
-                                                   'Printf',
                                                    'TestCase1',
                                                    'TestCase2',
-                                                   'TestCaseConvert',
-                                                   'Taxonomy.Canidae.Wolf',
-                                                   'Taxonomy.Canidae.Canis',
-                                                   'Taxonomy.Canidae.Vulpes',
-                                                   'Taxonomy.Canidae.Dog',
-                                                   'Taxonomy.Canidae.AFox',
-                                                   'Taxonomy.Canidae.Fox',
-                                                   'Taxonomy.Canidae.Canidae'
                                                  ]).then(() => {connectToServer()});
 console.log('end');
