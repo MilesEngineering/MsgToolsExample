@@ -105,16 +105,25 @@ WebDAV.Fs = function(rootUrl) {
         // Start at 1, because the 0th is the same as self.
         for(var i=1; i< doc.childNodes.length; i++) {
           var response     = doc.childNodes[i];
-            // note to Miles! Look at what the console.log(response) prints, and find out why the
-            // next error is "TypeError: response.getElementsByTagName(...)[0] is undefined"
-            //console.log(response);
-            // these used to all be "getElementsByTagName('D:blah'", and had to change them to 'ns0:', dunno why
-          var href         = response.getElementsByTagName('ns0:href')[0].firstChild.nodeValue;
+          // For some reason prefix sometimes needs to be 'D', and othertimes needs to be 'ns0', dunno why.
+          // Try using ns0 first, and if it fails, use D instead.  If *that* files, just give up
+          var prefix = 'ns0';
+          var href_parent = response.getElementsByTagName(prefix+':href');
+          if(href_parent.length == 0) {
+            prefix = 'D';
+            href_parent = response.getElementsByTagName(prefix+':href');
+            if(href_parent.length == 0) {
+                console.log("Error finding directory contents!  Can't find tags with D or ns0 in data structure");
+                console.log(response);
+                return result;
+            }
+          }
+          var href         = response.getElementsByTagName(prefix+':href')[0].firstChild.nodeValue;
           href = href.replace(/\/$/, ''); // Strip trailing slash
-          var propstat     = response.getElementsByTagName('ns0:propstat')[0];
-          var prop         = propstat.getElementsByTagName('ns0:prop')[0];
-          var resourcetype = prop.getElementsByTagName('ns0:resourcetype')[0];
-          var collection   = resourcetype.getElementsByTagName('ns0:collection')[0];
+          var propstat     = response.getElementsByTagName(prefix+':propstat')[0];
+          var prop         = propstat.getElementsByTagName(prefix+':prop')[0];
+          var resourcetype = prop.getElementsByTagName(prefix+':resourcetype')[0];
+          var collection   = resourcetype.getElementsByTagName(prefix+':collection')[0];
 
           if(collection) {
             result[i-1] = new fs.dir(href);
