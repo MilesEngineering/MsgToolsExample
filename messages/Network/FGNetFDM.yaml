@@ -1,0 +1,303 @@
+Enums:
+  - Name: EngineState
+    Options:
+      - Name: OffVal
+        Value: 0
+      - Name: Cranking
+        Value: 1
+      - Name: Running
+        Value: 2
+  - Name: TankSelected
+    Options:
+      - Name: Selected
+        Value: 0
+      - Name: Capacity
+        Value: 1
+      - Name: Usable
+        Value: 2
+      - Name: Density
+        Value: 3
+      - Name: Level
+        Value: 4
+Messages:
+  - Name: FGNetFDM
+    ID: 0xFFFFFF0E
+    Description: Flight Gear network interface message from https://sourceforge.net/p/flightgear/flightgear/ci/next/tree/src/Network/net_fdm.hxx
+    Fields:
+      - Name: Version
+        Type: uint32
+        Description: Protocol version, increment when data values change
+        Default: 25
+      - Name: Padding
+        Type: uint32
+        Description: not used
+      - Name: Latitude
+        Type: float64
+        Description: geodetic
+        Units: radians
+      - Name: Longitude
+        Type: float64
+        Description: geodetic
+        Units: radians
+      - Name: Altitude
+        Type: float64
+        Description: above sea level
+        Units: meters
+      - Name: AGL
+        Type: float32
+        Description: above ground level
+        Units: meters
+
+        #define FG_MAX_ENGINES 4
+        #define FG_MAX_WHEELS  3
+        #define FG_MAX_TANKS   4
+
+      - Name: Phi
+        Type: float32
+        Description: roll
+        Units: radians
+      - Name: Theta
+        Type: float32
+        Description: pitch
+        Units: radians
+      - Name: Psi
+        Type: float32
+        Description: yaw or true heading
+        Units: radians
+      - Name: Alpha
+        Type: float32
+        Description: angle of attack
+        Units: radians
+      - Name: Beta
+        Type: float32
+        Description: side slip angle
+        Units: radians
+      - Name: Phidot
+        Type: float32
+        Description: roll rate
+        Units: radians/sec
+      - Name: Thetadot
+        Type: float32
+        Description: pitch rate
+        Units: radians/sec
+      - Name: Psidot
+        Type: float32
+        Description: yaw rate
+        Units: radians/sec
+      - Name: Vcas
+        Type: float32
+        Description: calibrated airspeed
+        Units: 
+      - Name: ClimbRate
+        Type: float32
+        Description: 
+        Units: fps
+      - Name: VNorth
+        Type: float32
+        Description: north velocity in local/body frame
+        Units: fps
+      - Name: VEast
+        Type: float32
+        Description: east velocity in local/body frame
+        Units: fps
+      - Name: VDown
+        Type: float32
+        Description: down/vertical velocity in local/body frame
+        Units: fps
+      - Name: VBodyU
+        Type: float32
+        Description: ECEF velocity in body frame
+        Units: 
+      - Name: VBodyV
+        Type: float32
+        Description: ECEF velocity in body frame
+        Units: 
+      - Name: VBodyW
+        Type: float32
+        Description: ECEF velocity in body frame
+        Units:
+      - Name: A_X_pilot
+        Type: float32
+        Description: X accel in body frame
+        Units: ft/sec^2
+      - Name: A_Y_pilot
+        Type: float32
+        Description: Y accel in body frame
+        Units: ft/sec^2
+      - Name: A_Z_pilot
+        Type: float32
+        Description: Z accel in body frame
+        Units: ft/sec^2
+      - Name: StallWarning
+        Type: float32
+        Description: 0.0 - 1.0 indicating the amount of stall
+        Units: 
+      - Name: SlipDeg
+        Type: float32
+        Description: slip ball deflection
+        Units: 
+
+      - Name: NumEngines
+        Type: uint32
+        Description: Number of valid engines
+        Units: 
+      - Name: EngState
+        Type: uint32
+        Description: Engine state
+        Enum: EngineState
+        Count: 4
+      - Name: Rpm
+        Type: float32
+        Description: Engine RPM
+        Units: Rev/min
+        Count: 4
+      - Name: FuelFlow
+        Type: float32
+        Units: gallons/hr
+        Count: 4
+      - Name: FuelPx
+        Type: float32
+        Units: PSI
+        Description: Fuel Pressure
+        Count: 4
+      - Name: Egt
+        Type: float32
+        Units: DegF
+        Description: Exhaust gas temp
+        Count: 4
+      - Name: Cht
+        Type: float32
+        Units: DegF
+        Description: Cylinder head temp
+        Count: 4
+      - Name: MpOsi
+        Type: float32
+        Units: 
+        Description: Manifold Pressure
+        Count: 4
+      - Name: Tit
+        Type: float32
+        Units: 
+        Description: Turbine Inlet Temperature
+        Count: 4
+      - Name: OilTemp
+        Type: float32
+        Units: DegF
+        Description:
+        Count: 4
+      - Name: OilPx
+        Type: float32
+        Units: PSI
+        Description: Oil Pressure
+        Count: 4
+
+      - Name: NumTanks
+        Type: uint32
+        Description: Max number of fuel tanks
+        Units: 
+      - Name: FuelQuantity
+        Type: float32
+        Units: PSI
+        Description: used by GPSsmooth and possibly others
+        Count: 4
+      - Name: TankSelected
+        Type: uint32
+        Description: Required for multiple-pc setups to work
+        Enum: TankSelected
+        Count: 4
+      - Name: CapacityM3
+        Type: float64
+        Units:
+        Description:
+        Count: 4
+      - Name: UnusableM3
+        Type: float64
+        Units:
+        Description:
+        Count: 4
+      - Name: DensityKgpm3
+        Type: float64
+        Units:
+        Description:
+        Count: 4
+      - Name: LevelM3
+        Type: float64
+        Units:
+        Description:
+        Count: 4
+
+      - Name: NumWheels
+        Type: uint32
+        Description: 
+      - Name: Wow
+        Type: uint32
+        Description: Weight on Wheels
+        Units: Boolean
+        Count: 3
+      - Name: GearPos
+        Type: uint32
+        Description: 
+        Count: 3
+      - Name: GearSteer
+        Type: uint32
+        Description: 
+        Count: 3
+      - Name: GearCompression
+        Type: uint32
+        Description: 
+        Count: 3
+
+      - Name: CurTime
+        Type: uint32
+        Description: current unix time. FIXME. make this uint64_t before 2038
+        Units: Seconds
+      - Name: Warp
+        Type: uint32
+        Description: Offset in seconds to unix time
+        Units: Seconds
+      - Name: Visibility
+        Type: float32
+        Description: visibility in meters (for env. effects)
+        Units: Meters
+
+      - Name: Elevator
+        Type: float32
+        Description: Control Surface Position
+        Units: Normalized
+      - Name: ElevatorTrimTab
+        Type: float32
+        Description: Control Surface Position
+        Units: Normalized
+      - Name: LeftFlap
+        Type: float32
+        Description: Control Surface Position
+        Units: Normalized
+      - Name: RightFlap
+        Type: float32
+        Description: Control Surface Position
+        Units: Normalized
+      - Name: LeftAileron
+        Type: float32
+        Description: Control Surface Position
+        Units: Normalized
+      - Name: RightAileron
+        Type: float32
+        Description: Control Surface Position
+        Units: Normalized
+      - Name: Rudder
+        Type: float32
+        Description: Control Surface Position
+        Units: Normalized
+
+      - Name: NoseWheel
+        Type: float32
+        Description: Control Surface Position
+        Units: Normalized
+      - Name: Speedbrake
+        Type: float32
+        Description: Control Surface Position
+        Units: Normalized
+      - Name: Spoilers
+        Type: float32
+        Description: Control Surface Position
+        Units: Normalized
