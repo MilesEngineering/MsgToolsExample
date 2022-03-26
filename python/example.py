@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 from msgtools.lib.messaging import Messaging as M
 from msgtools.lib.message import Message as Msg
 from msgtools.console.client import Client
