@@ -9,6 +9,7 @@
 #include "TestCase2.h"
 #include "TestCase4.h"
 #include <math.h>
+#include "linux_gdb_instructions.h"
 #ifdef BUILD_SPEC_Linux
 #include "Linux/network_client.h"
 #endif
@@ -101,6 +102,8 @@ class TestClient2 : public MessageClient
 
 int main (void)
 {
+    LinuxGdbInstructions::print();
+
     //# Note: Do not declare anything on the stack in main!
     //# FreeRTOS repurposes the main stack for ISRs once the scheduler starts,
     //# and that will corrupt any variables declared on the stack here.
@@ -162,6 +165,9 @@ int main (void)
     static TestClient2 tc2(mp, tc1);
 #ifdef BUILD_SPEC_Linux
     static NetworkClient nc(mp);
+    // CanClient works on Linux, but cannot be used at the same time as NetworkClient,
+    // or an infinite loop of messages will be created.
+    //static CanClient* can = CanClient::Can1(&mp);
 #endif
 #ifdef BUILD_SPEC_sam
     //static SerialClient* sc = UsartClient::Usart0(&mp);

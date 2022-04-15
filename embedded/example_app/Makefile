@@ -6,10 +6,11 @@ SAM_VARIANT := same70
 FLAGS += -DENABLE_DEBUG_SEGGER_RTT_STRINGS -DENABLE_DEBUG_MSGS
 
 SRC := \
-    main.cpp                     \
-    ucplatform/tick.cpp          \
-    ucplatform/debug_server.cpp  \
-    ucplatform/debug_printf.cpp  \
+    main.cpp                        \
+    ucplatform/tick.cpp             \
+    ucplatform/base_can_client.cpp  \
+    ucplatform/debug_server.cpp     \
+    ucplatform/debug_printf.cpp     \
     ucplatform/freertos_fault_handlers.cpp \
     ucplatform/rtt/RTT/SEGGER_RTT.c        \
     ucplatform/rtt/RTT/SEGGER_RTT_printf.c

@@ -9,6 +9,7 @@
 #include "simulink/simulink_message_client.h"
 #include "example_model_grt_rtw/example_model.h"
 #include <math.h>
+#include "linux_gdb_instructions.h"
 #ifdef BUILD_SPEC_Linux
 #include "Linux/network_client.h"
 #endif
@@ -36,6 +37,7 @@ MessagePoolWithStorage<POOL_BUF_SIZE, POOL_BUF_COUNT> mp;
 
 int main (void)
 {
+    LinuxGdbInstructions::print();
     //# Note: Do not declare anything on the stack in main!
     //# FreeRTOS repurposes the main stack for ISRs once the scheduler starts,
     //# and that will corrupt any variables declared on the stack here.
@@ -94,6 +96,9 @@ int main (void)
      (SimulinkMessageClient::ModelFunctionT)&example_model_step);
 #ifdef BUILD_SPEC_Linux
     static NetworkClient nc(mp);
+    // CanClient works on Linux, but cannot be used at the same time as NetworkClient,
+    // or an infinite loop of messages will be created.
+    //static CanClient* can = CanClient::Can1(&mp);
 #endif
 #ifdef BUILD_SPEC_sam
     //static SerialClient* sc = UsartClient::Usart0(&mp);

@@ -5,6 +5,7 @@
 #include "message.h"
 #include "message_pool.h"
 #include "message_queue.h"
+#include "linux_gdb_instructions.h"
 
 #include "sam/console.h"
 #include "sam/serial_client.h"
@@ -24,6 +25,8 @@ MessagePoolWithStorage<POOL_BUF_SIZE, POOL_BUF_COUNT> mp;
 
 int main (void)
 {
+    LinuxGdbInstructions::print();
+
     //# Note: Do not declare anything on the stack in main!
     //# FreeRTOS repurposes the main stack for ISRs once the scheduler starts,
     //# and that will corrupt any variables declared on the stack here.

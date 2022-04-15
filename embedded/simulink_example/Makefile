@@ -9,10 +9,11 @@ SIMULINK_MODEL_NAME := example_model
 INCLUDE_SIMULINK_SUPPORT := true
 
 SRC := \
-    main.cpp                     \
-    ucplatform/tick.cpp          \
-    ucplatform/debug_server.cpp  \
-    ucplatform/debug_printf.cpp  \
+    main.cpp                        \
+    ucplatform/tick.cpp             \
+    ucplatform/base_can_client.cpp  \
+    ucplatform/debug_server.cpp     \
+    ucplatform/debug_printf.cpp     \
     ucplatform/freertos_fault_handlers.cpp \
     ucplatform/rtt/RTT/SEGGER_RTT.c        \
     ucplatform/rtt/RTT/SEGGER_RTT_printf.c \
