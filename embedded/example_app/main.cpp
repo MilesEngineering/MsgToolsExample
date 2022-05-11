@@ -126,7 +126,6 @@ int main (void)
     static UsbCdcClient* usb = UsbCdcClient::Instance(&mp);
     static CanClient* can = CanClient::Can1(&mp);
 #endif
-    MessageClient::InitializeAll();
     vTaskStartScheduler();
     return 0;
 }

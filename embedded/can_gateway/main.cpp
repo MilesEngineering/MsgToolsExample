@@ -44,7 +44,6 @@ int main (void)
     static UsbCdcClient* usb = UsbCdcClient::Instance(&mp);
 #endif
     [[maybe_unused]] static CanClient* can = CanClient::Can1(&mp);
-    MessageClient::InitializeAll();
     vTaskStartScheduler();
     return 0;
 }
