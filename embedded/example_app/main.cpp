@@ -97,8 +97,20 @@ class TestClient2 : public MessageClient
         TestClient1& m_tc1;
 };
 
+#ifdef BUILD_SPEC_Linux
+int main (int argc, char* argv[])
+{
+    if(argc == 2)
+    {
+        if(strcmp(argv[1], "--lockstep") == 0)
+        {
+            g_run_in_lockstep = true;
+        }
+    }
+#else
 int main (void)
 {
+#endif
     //# Note: Do not declare anything on the stack in main!
     //# FreeRTOS repurposes the main stack for ISRs once the scheduler starts,
     //# and that will corrupt any variables declared on the stack here.
@@ -124,7 +136,9 @@ int main (void)
 #else
     //static SerialClient* sc = UsartClient::Usart0(&mp);
     static UsbCdcClient* usb = UsbCdcClient::Instance(&mp);
-    static CanClient* can = CanClient::Can1(&mp);
+    PinMode can1_rx_pin(PIO_PC12_IDX, IOPORT_MODE_MUX_C);
+    PinMode can1_tx_pin(PIO_PC14_IDX, IOPORT_MODE_MUX_C);
+    static CanClient* can = CanClient::Can1(&can1_rx_pin, &can1_tx_pin, &mp);
 #endif
     vTaskStartScheduler();
     return 0;

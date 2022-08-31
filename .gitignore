@@ -7,3 +7,7 @@ embedded/.vscode/
 *.jdebug
 *.jdebug.user
 *.slxc
+.prerequisites.log
+.install_sentinel.log
+__pycache__/
+*.egg-info/

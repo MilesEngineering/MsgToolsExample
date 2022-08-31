@@ -1,67 +1,17 @@
-all:: check cpp c dart python java js kotlin swift matlab simulink html
-
-.PHONY: python cpp c java js kotlin swift matlab simulink html check
-
-python:
-	msgparser messages obj/CodeGenerator/Python python
-
-cpp:
-	msgparser messages obj/CodeGenerator/Cpp cpp
-
-c:
-	msgparser messages obj/CodeGenerator/C c
-
-dart:
-	msgparser messages obj/CodeGenerator/Dart/lib dart
-
-java:
-	msgparser messages obj/CodeGenerator/Java java
-
-js:
-	msgparser messages obj/CodeGenerator/Javascript javascript
-
-kotlin:
-	msgparser messages obj/CodeGenerator/Kotlin kotlin
-
-swift:
-	msgparser messages obj/CodeGenerator/Swift swift
-
-matlab:
-	msgparser messages obj/CodeGenerator/Matlab/+Messages matlab
-
-simulink:
-	msgparser messages obj/CodeGenerator/Simulink/+Messages simulink
-
-html:
-	msgparser messages obj/CodeGenerator/Html html
-	@find obj/CodeGenerator/Html -type d -print0 | xargs -n 1 -0 cp html/css/bootstrap.min.css
-
-check: obj/CodeGenerator/MsgDigest.txt
-
-clean clobber::
-	rm -rf obj
-
-MSG_FILES := $(shell cd messages && find * -iname \*.yaml)
-
-obj/CodeGenerator/MsgDigest.txt: $(addprefix messages/,$(MSG_FILES))
-	$(call colorecho,Checking message validity)
-	msgcheck $@ messages
-
-save_expected_results:
-	rm -rf expected/
-	mv obj/ expected/
-	find expected/ -type f | xargs sed -i -e 's/Created.*at.*from://'
-
-remove_timestamps:
-	find obj/ -type f | xargs sed -i -e 's/Created.*at.*from://'
+all:: .prerequisites.log
 
 SUBDIRS := embedded
 
-TOPTARGETS := all clean clobber
+# Run a shell script only once, and mark when it's been run so it doesn't get
+# run again until it changes.  Use /bin/bash so that we can use pipefail to stop
+# execution when anything in the command fails, not just the return value of tee.
+.prerequisites.log: SHELL := /bin/bash
+.prerequisites.log: install_prerequisites.sh
+	@set -o pipefail ; ./$<  2>&1 | tee $@~
+	@mv $@~ $@
 
-$(TOPTARGETS) :: $(SUBDIRS)
-$(SUBDIRS):
-	@$(MAKE) -C $@ $(MAKECMDGOALS)
-
-.PHONY: $(TOPTARGETS) $(SUBDIRS)
-
+include embedded/ucplatform/mk/include.mk
+# subdir.mk will run Make for all dirs in the SUBDIRS variable.
+include $(MK_DIR)/subdir.mk
+# codegen.mk will run the code generator for all the default languages
+include $(MK_DIR)/codegen.mk
