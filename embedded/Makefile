@@ -1,6 +1,6 @@
-TOPTARGETS := build_all clean_all clobber_all
+TOPTARGETS := build_all clean_all clobber_all clean clobber
 
-SUBDIRS := example_app can_gateway
+SUBDIRS := example_app can_gateway simulink_example
 
 $(TOPTARGETS): $(SUBDIRS)
 $(SUBDIRS):

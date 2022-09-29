@@ -56,7 +56,9 @@ int main (void)
 #else
     //static SerialClient* sc = UsartClient::Usart0(&mp);
     static UsbCdcClient* usb = UsbCdcClient::Instance(&mp);
-    static CanClient* can = CanClient::Can1(&mp);
+    static PinMode can1_rx_pin(PIO_PC12_IDX, IOPORT_MODE_MUX_C);
+    static PinMode can1_tx_pin(PIO_PC14_IDX, IOPORT_MODE_MUX_C);
+    [[maybe_unused]] static CanClient* can1 = CanClient::Can1(&can1_rx_pin, &can1_tx_pin, &mp);
 #endif
     vTaskStartScheduler();
     return 0;

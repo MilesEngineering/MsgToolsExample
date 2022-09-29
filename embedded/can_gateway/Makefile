@@ -7,7 +7,7 @@ FLAGS += -DENABLE_DEBUG_SEGGER_RTT_STRINGS -DENABLE_DEBUG_STDOUT
 
 SRC = \
     main.cpp                               \
-    ucplatform/hw_init.c                   \
+    ucplatform/hw_init.cpp                 \
     ucplatform/tick.cpp                    \
     ucplatform/base_can_client.cpp         \
     ucplatform/debug_printf.cpp            \

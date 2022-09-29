@@ -37,8 +37,8 @@ class TestClient1 : public MessageClient
         TestClient1(MessagePool& pool)
         : MessageClient("tc1", &pool, 500)
         {
-            MessageBus::Subscribe(this, MessageKey(TestCase4Message::MSG_ID));
-            MessageBus::Subscribe(this, MessageKey(TestCase2Message::MSG_ID));
+            Subscribe(MessageKey(TestCase4Message::MSG_ID));
+            Subscribe(MessageKey(TestCase2Message::MSG_ID));
         }
         void HandleReceivedMessage(Message& msg)
         {
@@ -53,7 +53,7 @@ class TestClient1 : public MessageClient
             {
                 tcm.SetA(GetTickCount());
                 debugPrintf("TC1 sending MessageID %d at time %d\n",(int)tcm.GetMessageID(),(int)GetTickCount());
-                SendMessage(tcm);
+                PublishMessage(tcm);
             }
         }
         void Woken() override
@@ -70,8 +70,8 @@ class TestClient2 : public MessageClient
         : MessageClient("tc2", &pool, 1000),
           m_tc1(tc1)
         {
-            MessageBus::Subscribe(this, TestCase4Message::MSG_ID);
-            MessageBus::Subscribe(this, TestCase2Message::MSG_ID);
+            Subscribe(TestCase4Message::MSG_ID);
+            Subscribe(TestCase2Message::MSG_ID);
         }
         void HandleReceivedMessage(Message& msg)
         {

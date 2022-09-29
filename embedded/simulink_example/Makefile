@@ -9,7 +9,7 @@ INCLUDE_SIMULINK_SUPPORT := true
 
 SRC := \
     main.cpp                        \
-    ucplatform/hw_init.c            \
+    ucplatform/hw_init.cpp          \
     ucplatform/tick.cpp             \
     ucplatform/base_can_client.cpp  \
     ucplatform/debug_server.cpp     \
