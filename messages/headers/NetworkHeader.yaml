@@ -29,3 +29,4 @@ Messages:
         Type: float64
         Description: Time since epoch
         Default: 0
+        Units: s

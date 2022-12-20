@@ -30,12 +30,13 @@
 //# Either shrink it to 64, or implement fragmentation/reassembly on CAN-FD.
 #define POOL_BUF_SIZE (128)
 
-// An example client that sends a test messages periodically
-class TestClient1 : public MessageClient
+// An example client that sends a test messages periodically, and integrates
+// DebugServer functionality (which is only necessary for one client per application).
+class TestClient1 : public DebugServer
 {
     public:
         TestClient1(MessagePool& pool)
-        : MessageClient("tc1", &pool, 500)
+        : DebugServer("ExampleApp", "tc1", &pool, 500)
         {
             Subscribe(MessageKey(TestCase4Message::MSG_ID));
             Subscribe(MessageKey(TestCase2Message::MSG_ID));
@@ -125,7 +126,6 @@ int main (void)
     // after vTaskStartScheduler().
     static MessagePoolWithStorage<POOL_BUF_SIZE, POOL_BUF_COUNT> mp;
     MessagePool::SetInterruptContextPool(mp);
-    static DebugServer dbs("ExampleApp");
     static TestClient1 tc1(mp);
     static TestClient2 tc2(mp, tc1);
 #ifdef BUILD_SPEC_Linux

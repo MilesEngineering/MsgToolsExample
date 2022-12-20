@@ -42,6 +42,7 @@ Messages:
         Type: uint16
         Description: Rolling millisecond counter.
         Default: 0
+        Units: ms
       - Name: HeaderChecksum
         Type: uint16
         Default: 0
