@@ -1,0 +1,35 @@
+# virtual comm port on eDBG device built in to Atmel(/Microchip) eval boards
+ACTION=="add", SUBSYSTEM=="tty", ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="2111", SYMLINK+="ttyEDBG"
+# virtual com port implemented by microcontroller application in Atmel(/Microchip) ASF code.
+# I've only used this as a Message interface, ultimately to be a USB<->CAN-FD converter.
+ACTION=="add", SUBSYSTEM=="tty", ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="2404", SYMLINK+="ttyHALEAP"
+
+# virtual comm port for connecting AHRS.
+ACTION=="add", SUBSYSTEM=="tty", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6001", ATTRS{serial}=="AR0JUI6P", SYMLINK+="ttyAHRS", MODE="0666"
+#virtual comm port for connecting USB GPS.
+ACTION=="add", SUBSYSTEM=="tty", ATTRS{idVendor}=="1546", ATTRS{idProduct}=="01a7", SYMLINK+="ttyGPS", MODE="0666"
+#virtual comm ports for connecting TTC radios
+ACTION=="add", SUBSYSTEM=="tty", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6015", SYMLINK+="ttyTTC", MODE="0666"
+ACTION=="add", SUBSYSTEM=="tty", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6015", SYMLINK+="ttyTTC", MODE="0666"
+
+# virtual comm port for *simulating* AHRS.
+ACTION=="add", SUBSYSTEM=="tty", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6001", ATTRS{serial}=="AB5N2P9X", SYMLINK+="ttyAHRS_sim", MODE="0666"
+#virtual comm port for *simulating* GPS
+ACTION=="add", SUBSYSTEM=="tty", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6001", ATTRS{serial}=="AB0L6LAZ", SYMLINK+="ttyGPS_sim", MODE="0666"
+#virtual comm port for *simulating* TT&C
+ACTION=="add", SUBSYSTEM=="tty", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6001", ATTRS{serial}=="AB5NDA8E", SYMLINK+="ttyTTC_sim", MODE="0666"
+#virtual comm port for *simulating* SBUS
+ACTION=="add", SUBSYSTEM=="tty", ATTRS{idVendor}=="0403", ATTRS{idProduct}=="6001", ATTRS{serial}=="FT86HZLJ", SYMLINK+="ttySBUS_sim", MODE="0666"
+
+# Virtual comm port for connecting to Pololu Maestro servo controllers, for causing flex sensor flex in the HITL.
+# This is a complicated rule that uses PROGRAM and RESULT to look at USB devpaths to distinguish the difference between
+# 1.0 being the command port and 1.2 being the pass-through UART of the Pololu Servo Maestro.
+# Without the use of PROGRAM and RULE, the udev rule would sometimes incorrectly get applied to the pass-through UART instead of the command port.
+ACTION=="add", SUBSYSTEM=="tty", ATTRS{idVendor}=="1ffb", ATTRS{idProduct}=="0089", PROGRAM="/bin/bash -c '/bin/echo %p | /bin/grep -c :1.0/tty'", RESULT=="1", SYMLINK+="ttyservomaestro", MODE="0666"
+
+# additional rule for Pololu Servo Maestro, needed by MaestroControlCenter
+SUBSYSTEM=="usb", ATTRS{idVendor}=="1ffb", MODE="0666"
+
+# B&K power supplies
+ACTION=="add", SUBSYSTEM=="tty", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="5740", ATTRS{serial}=="579E24147", SYMLINK+="ttyPowerSupplyRed", MODE="0666"
+ACTION=="add", SUBSYSTEM=="tty", ATTRS{idVendor}=="0483", ATTRS{idProduct}=="5740", ATTRS{serial}=="579E24138", SYMLINK+="ttyPowerSupplySilver", MODE="0666"

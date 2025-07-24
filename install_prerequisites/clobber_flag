@@ -1,0 +1,7 @@
+# This file works along with the makefile copy_clobber_flag and check_clobber_flag
+# rules to detect when a "make clobber" needs to occur.
+# Whenver anyone wants to force other users to do a "make clobber", just check
+# in an updated version of this file.
+1
+# The below line will be printed as a note to the user on *why* a 'make clean' is required.
+Clear out incompatible dependencies.

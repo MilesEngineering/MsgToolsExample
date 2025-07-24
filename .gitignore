@@ -1,3 +1,9 @@
+# Compiled Python bytecode
+*.py[cod]
+
+# Log files
+*.log
+
 obj
 slprj
 .DS_Store
@@ -7,7 +13,7 @@ embedded/.vscode/
 *.jdebug
 *.jdebug.user
 *.slxc
-.prerequisites.log
+setup/prerequisites.log
 .install_sentinel.log
 __pycache__/
 *.egg-info/
