@@ -1,0 +1,472 @@
+Enums:
+  - Name: Priorities
+    Options:
+      - Name: Info
+        Value: 0
+      - Name: Warning
+        Value: 1
+      - Name: Error
+        Value: 2
+      - Name: Fatal
+        Value: 3
+  - Name: DeviceTypes
+    Options:
+      - Name: Autopilot
+        Value: 0
+  - Name: FaultTypes
+    Options:
+      - Name: SOFTWARE_RESET
+        Value: 0
+      - Name: STACK_OVERFLOW
+        Value: 1
+      - Name: IMPRECISERR
+        Value: 2
+      - Name: PRECISERR
+        Value: 3
+      - Name: IBUSERR
+        Value: 4
+      - Name: INTDIVBYZERO
+        Value: 5
+      - Name: FLOATDIVBYZERO
+        Value: 6
+      - Name: UNALIGNED
+        Value: 7
+  - Name: ResetCauses
+    Options:
+      - Name: UNKNOWN
+        Value: 0
+      - Name: STACK_OVERFLOW
+        Value: 1
+      - Name: HARDFAULT
+        Value: 2
+Messages:
+  - Name: DeviceInfo
+    ID: 0x100
+    Description: Information about debug info on a device
+    Alias: DebugDeviceInfo
+    Fields:
+      - Name: SoftwareInfo
+        Type: uint32
+        Bitfields:
+            - Name: SoftwareMajorVersion
+              NumBits: 8
+            - Name: SoftwareMinorVersion
+              NumBits: 8
+            - Name: SoftwarePatchVersion
+              NumBits: 8
+            - Name: DeviceType
+              NumBits: 8
+              Enum: DeviceTypes
+      - Name: Uptime
+        Type: uint32
+        Units: OS_Ticks
+      - Name: Reset
+        Type: uint16
+        Bitfields:
+            - Name: GeneralReset
+              Units: Boolean
+              NumBits: 1
+            - Name: BackupReset
+              Units: Boolean
+              NumBits: 1
+            - Name: WatchdogReset
+              Units: Boolean
+              NumBits: 1
+            - Name: SoftwareReset
+              Units: Boolean
+              NumBits: 1
+            - Name: UserReset
+              Units: Boolean
+              NumBits: 1
+            - Name: BrownoutReset
+              Units: Boolean
+              NumBits: 1
+            - Name: CoreVoltageMonitorReset
+              Units: Boolean
+              NumBits: 1
+            - Name: HardfaultReset
+              Units: Boolean
+              NumBits: 1
+            - Name: StackoverflowReset
+              Units: Boolean
+              NumBits: 1
+      - Name: BatteryVoltage
+        Type: uint16
+        Units: Volts
+        Scale: 0.01
+      - Name: CPUTemperature
+        Type: uint16
+        Units: Celsius
+        Scale: 0.01
+        Offset: -273.15
+      - Name: Name
+        Type: uint8
+        Count: 12
+        Units: ASCII
+        Description: The name of the device
+      - Name: CoreInterfaceID
+        Type: uint8
+        Units: hex
+        Count: 8
+        Description: The ID of the core interface for this device.
+      - Name: ApplicationInterfaceID
+        Type: uint8
+        Units: hex
+        Count: 8
+        Description: The ID of the application interface for this device.
+      - Name: DebugStringDictionaryID
+        Type: uint8
+        Units: hex
+        Count: 8
+        Description: The ID of the debug string dictionary for this device.
+  - Name: ThreadInfo
+    ID: 0x101
+    Description: Information about a thread, including it's debug stream info
+    Alias: DebugStreamInfo
+    Fields:
+      - Name: ThreadID
+        Type: uint8
+        Description: Some sort of identifier for the stream printing the message.
+      - Name: ThreadName
+        Type: uint8
+        Count: 16
+        Units: ASCII
+        Description: The name of the thread
+      - Name: DebugThreshold
+        Type: uint8
+        Enum: Priorities
+      - Name: ThreadPriority
+        Type: int16
+      - Name: MsgRxCount
+        Type: uint16
+      - Name: MsgTxCount
+        Type: uint16
+      - Name: StackSize
+        Type: uint16
+      - Name: StackUsed
+        Type: uint16
+  - Name: Printf
+    ID: 0x102
+    Description: Used to display debug information as strings.
+    Alias: DebugPrintf
+    Fields:
+      - Name: PackedField
+        Type: uint8
+        Units: ""
+        Description: To hold bitfields
+        Bitfields:
+            - Name: Priority
+              NumBits: 2
+              Enum: Priorities
+            - Name: StreamID
+              NumBits: 6
+      - Name: Buffer
+        Type: uint8
+        Count: 60
+        Units: ASCII
+        Description: The string to display.
+  - Name: PrintfID
+    ID: 0x103
+    Description: Used to output debug information as a format string ID and arg list.
+    Alias: DebugPrintfID
+    Fields:
+      - Name: PackedField
+        Type: uint8
+        Units: ""
+        Description: To hold bitfields
+        Bitfields:
+            - Name: Priority
+              NumBits: 2
+              Enum: Priorities
+            - Name: StreamID
+              NumBits: 6
+      - Name: FormatStringID
+        Type: uint16
+        Units: NA
+        Description: The unique ID of the format string.
+      - Name: Parameters
+        Type: uint32
+        Count: 8
+        Description: The arguments to use for string formatting
+  - Name: GetDeviceInfo
+    ID: 0x104
+    Description: Information about debug info on a device
+    Alias: GetDeviceDebugInfo
+  - Name: GetThreadInfo
+    ID: 0x105
+    Description: Information about a thread, including it's debug stream info
+    Alias: GetStreamDebugInfo
+    Fields:
+      - Name: ThreadID
+        Type: uint8
+        Description: Some sort of identifier for the stream printing the message.
+  - Name: SetDebugThreshold
+    ID: 0x106
+    Description: Used to set threshold for debug output
+    Alias: SetDebugThreshold
+    Fields:
+      - Name: StreamID
+        Type: uint8
+        Description: Some sort of identifier for the stream printing the message.
+      - Name: DebugThreshold
+        Type: uint8
+        Enum: Priorities
+  - Name: LowLevelFaults
+    ID: 0x107
+    Description: Used to cause errors, for testing
+    Fields:
+      - Name: Key
+        Type: uint32
+        Description: Message ignored unless key == 0x11235813 (decimal 287528979)
+      - Name: FaultType
+        Type: uint8
+        Description: Which fault to cause
+        Enum: FaultTypes
+  - Name: GetResetInfo
+    ID: 0x108
+    Description: Request for information about the last reset.
+    Fields:
+      - Name: ClearResetInfo
+        Type: uint8
+        Units: Boolean
+  - Name: ResetInfo
+    ID: 0x109
+    Description: Information about the last reset.
+    Fields:
+      - Name: LastReset
+        Type: uint16
+        Bitfields:
+            - Name: GeneralReset
+              Units: Boolean
+              NumBits: 1
+            - Name: BackupReset
+              Units: Boolean
+              NumBits: 1
+            - Name: WatchdogReset
+              Units: Boolean
+              NumBits: 1
+            - Name: SoftwareReset
+              Units: Boolean
+              NumBits: 1
+            - Name: UserReset
+              Units: Boolean
+              NumBits: 1
+            - Name: BrownoutReset
+              Units: Boolean
+              NumBits: 1
+            - Name: CoreVoltageMonitorReset
+              Units: Boolean
+              NumBits: 1
+            - Name: HardfaultReset
+              Units: Boolean
+              NumBits: 1
+            - Name: StackoverflowReset
+              Units: Boolean
+              NumBits: 1
+      - Name: Key
+        Type: uint32
+        Description: Invalid unless key == 0x11235813 (decimal 287528979)
+      - Name: StoredReset
+        Type: uint16
+        Enum: ResetCauses
+      - Name: TaskName
+        Type: uint8
+        Count: 16
+        Units: ASCII
+        Description: The name of the task that caused the reset.
+      - Name: R0
+        Type: uint32
+      - Name: R1
+        Type: uint32
+      - Name: R2
+        Type: uint32
+      - Name: R3
+        Type: uint32
+      - Name: R12
+        Type: uint32
+      - Name: LR
+        Type: uint32
+      - Name: PC
+        Type: uint32
+      - Name: PSR
+        Type: uint32
+        Bitfields:
+            - Name: IPSR
+              NumBits: 8
+            - Name: EPSR
+              NumBits: 19
+            - Name: APSR
+              NumBits: 5
+      - Name: SystemHandlerControl
+        Type: uint32
+        Description: System Handler Control and State Register (0xE000ED24)
+        Bitfields:
+            - Name: MEMFAULTACT
+              NumBits: 1
+              Description: Read as 1 if memory management fault is active
+            - Name: BUSFAULTACT
+              NumBits: 1
+              Description: Read as 1 if bus fault exception is active
+            - Name: UnusedBits1
+              NumBits: 1
+            - Name: USGFAULTACT
+              NumBits: 1
+              Description: Read as 1 if usage fault exception is active
+            - Name: UnusedBits2
+              NumBits: 3
+            - Name: SVCALLACT
+              NumBits: 1
+              Description: Read as 1 if SVC exception is active
+            - Name: MONITORACT
+              NumBits: 1
+              Description: Read as 1 if debug monitor exception is active
+            - Name: UnusedBits3
+              NumBits: 1
+            - Name: PENDSVACT
+              NumBits: 1
+              Description: Read as 1 if PendSV exception is active
+            - Name: SYSTICKACT
+              NumBits: 1
+              Description: Read as 1 if SYSTICK exception is active
+            - Name: USGFAULTPENDED
+              NumBits: 1
+              Description: Usage fault pended; usage fault started but was replaced by a higher-priority exception
+            - Name: MEMFAULTPENDED
+              NumBits: 1
+              Description: Memory management fault pended; memory management fault started but was replaced by a higher-priority exception
+            - Name: BUSFAULTPENDED
+              NumBits: 1
+              Description: Bus fault pended; bus fault handler was started but was replaced by a higher-priority exception
+            - Name: SVCALLPENDED
+              NumBits: 1
+              Description: SVC pended; SVC was started but was replaced by a higher-priority exception
+            - Name: MEMFAULTENA
+              NumBits: 1
+              Description: Memory management fault handler enable
+            - Name: BUSFAULTENA
+              NumBits: 1
+              Description: Bus fault handler enable
+            - Name: USGFAULTENA
+              NumBits: 1
+              Description: Usage fault handler enable
+      - Name: Mfsr
+        Type: uint8
+        Description: Memory Management Fault Status Register (0xE000ED28)
+        Bitfields:
+            - Name: IACCVIOL
+              NumBits: 1
+              Description: Instruction access violation
+            - Name: DACCVIOL
+              NumBits: 1
+              Description: Data access violation
+            - Name: UnusedBits4
+              NumBits: 1
+            - Name: MUNSTKERR
+              NumBits: 1
+              Description: Unstacking error
+            - Name: MSTKERR
+              NumBits: 1
+              Description: Stacking error
+            - Name: UnusedBits5
+              NumBits: 2
+            - Name: MMARVALID
+              NumBits: 1
+              Description: Indicates the MMAR is valid
+      - Name: Bfsr
+        Type: uint8
+        Description: Bus Fault Status Register (0xE000ED29)
+        Bitfields:
+            - Name: IBUSERR
+              NumBits: 1
+              Description: Instruction access violation
+            - Name: PRECISERR
+              NumBits: 1
+              Description: Precise data access violation
+            - Name: IMPRECISERR
+              NumBits: 1
+              Description: Imprecise data access violation
+            - Name: UNSTKERR
+              NumBits: 1
+              Description: Unstacking error
+            - Name: STKERR
+              NumBits: 1
+              Description: Stacking error
+            - Name: UnusedBits6
+              NumBits: 2
+            - Name: BFARVALID
+              NumBits: 1
+              Description: Indicates BFAR is valid
+      - Name: Bfar
+        Type: uint32
+        Description: Bus Fault Manage Address Register (0xE000ED38)
+      - Name: Ufsr
+        Type: uint16
+        Description: Usage Fault Status Register (0xE000ED2A)
+        Bitfields:
+            - Name: UNDEFINSTR
+              NumBits: 1
+              Description: Attempts to execute an undefined instruction
+            - Name: INVSTATE
+              NumBits: 1
+              Description: Attempts to switch to an invalid state (e.g., ARM)
+            - Name: INVPC
+              NumBits: 1
+              Description: Attempts to do an exception with a bad value in the EXC_RETURN number
+            - Name: NOCP
+              NumBits: 1
+              Description: Attempts to execute a coprocessor instruction
+            - Name: UnusedBits7
+              NumBits: 4
+            - Name: UNALIGNED
+              NumBits: 1
+              Description: Indicates that an unaligned access fault has taken place
+            - Name: DIVBYZERO
+              NumBits: 1
+              Description: Indicates a divide by zero has taken place (can be set only if DIV_0_TRP is set)
+      - Name: Hfsr
+        Type: uint32
+        Description: Hard Fault Status Register (0xE000ED2C)
+        Bitfields:
+            - Name: UnusedBits8
+              NumBits: 1
+            - Name: VECTBL
+              NumBits: 1
+              Description: Indicates hard fault is caused by failed vector fetch
+            - Name: UnusedBits9
+              NumBits: 28
+            - Name: FORCED
+              NumBits: 1
+              Description: Indicates hard fault is taken because of bus fault/memory management fault/usage fault
+            - Name: DEBUGEVT
+              NumBits: 1
+              Description: Indicates hard fault is triggered by debug event
+      - Name: Dfsr
+        Type: uint8
+        Description: Debug Fault Status Register (0xE000ED30)
+        Bitfields:
+            - Name: HALTED
+              NumBits: 1
+              Description: Halt requested in NVIC
+            - Name: BKPT
+              NumBits: 1
+              Description: BKPT instruction executed
+            - Name: DWTTRAP
+              NumBits: 1
+              Description: DWT match occurred
+            - Name: VCATCH
+              NumBits: 1
+              Description: Vector fetch occurred
+            - Name: EXTERNAL
+              NumBits: 1
+              Description: EDBGRQ signal asserted
+      - Name: Afsr
+        Type: uint32
+        Description: Auxiliary Fault Status Register (0xE000ED3C), Vendor controlled (optional)
+  - Name: ClearConfigSettings
+    ID: 0x10A
+    Description: The current configuration value(s) for a specific Key.
+    Fields:
+      - Name: MagicValue
+        Type: uint32
+        DefaultValue: 0
+        Description: Set to 0xDEADBEEF, else the message will be ignored.
