@@ -3,7 +3,7 @@ BUILD_SPEC := same70
 
 # output debug info as strings on RTT and stdout.
 # this isn't that efficient, but doesn't require a debug dictionary.
-FLAGS += -DENABLE_DEBUG_SEGGER_RTT_STRINGS -DENABLE_DEBUG_STDOUT
+FLAGS += -DENABLE_DEBUG_SEGGER_RTT_STRINGS -DENABLE_DEBUG_STDOUT -D_ASSERT_ENABLE_
 
 SRC = \
     main.cpp                               \
@@ -19,9 +19,9 @@ SRC = \
 ifneq (Linux,$(BUILD_SPEC))
 SRC += \
     ucplatform/sam/serial_client.cpp       \
-    ucplatform/sam/fault_handlers.cpp 
+    ucplatform/sam/fault_handlers.cpp      \
+    ucplatform/sam/hardfault_handler.cpp   \
 
-INCLUDE_SAM_CAN_SUPPORT := true
 INCLUDE_SAM_USB_SUPPORT := true
 
 endif

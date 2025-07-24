@@ -33,7 +33,7 @@ int main (void)
     //# Note: Do not declare anything on the stack in main!
     //# FreeRTOS repurposes the main stack for ISRs once the scheduler starts,
     //# and that will corrupt any variables declared on the stack here.
-    hw_init();
+    HWInit::hw_init();
 
     printf("\n\nMsgTools CAN-FD Gateway.\n\n");
     

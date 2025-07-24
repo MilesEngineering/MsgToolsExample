@@ -6,26 +6,21 @@ Messages:
         Type: uint32
         Units: ""
         Description: 29-bit Extended CAN Packet ID
+        Default: 0
         Bitfields:
             - Name: Priority
               NumBits: 2
-              Default: 0
             - Name: ID
               NumBits: 12
-              Default: 0
               IDBits: 10
             - Name: Fragmented
               NumBits: 1
-              Default: 0
             - Name: Source
               NumBits: 5
-              Default: 0
             - Name: Destination
               NumBits: 5
-              Default: 0
             - Name: LengthDecrement
               NumBits: 4
-              Default: 0
   - Name: FragmentationHeader
     Description: Exists in all fragmented packets.  Follows CAN header, stored in CAN packet body.
     Fields:
