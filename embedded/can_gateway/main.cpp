@@ -11,8 +11,8 @@
 #include "Linux/network_client.h"
 #include "Linux/can_client.h"
 #else
-#include "sam/serial_client.h"
-#include "sam/can_client.h"
+#include "samx7x/serial_client.h"
+#include "samx7x/can_client.h"
 #endif
 #include <inttypes.h>
 

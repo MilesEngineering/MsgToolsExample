@@ -7,20 +7,20 @@ FLAGS += -DENABLE_DEBUG_SEGGER_RTT_STRINGS -DENABLE_DEBUG_STDOUT -D_ASSERT_ENABL
 
 SRC = \
     main.cpp                               \
-    ucplatform/hw_init.cpp                 \
-    ucplatform/tick.cpp                    \
-    ucplatform/base_can_client.cpp         \
-    ucplatform/debug_printf.cpp            \
-    ucplatform/freertos_fault_handlers.cpp \
-    ucplatform/rtt/RTT/SEGGER_RTT.c        \
-    ucplatform/rtt/RTT/SEGGER_RTT_printf.c \
-    ucplatform/$(BUILD_SPEC_DIRNAME)/can_client.cpp
+    ucplatform/src/hw_init.cpp                 \
+    ucplatform/src/tick.cpp                    \
+    ucplatform/src/base_can_client.cpp         \
+    ucplatform/src/debug_printf.cpp            \
+    ucplatform/src/freertos_fault_handlers.cpp \
+    ucplatform/libs/rtt/RTT/SEGGER_RTT.c        \
+    ucplatform/libs/rtt/RTT/SEGGER_RTT_printf.c \
+    ucplatform/drivers/$(BUILD_SPEC_DIRNAME)/can_client.cpp
 
 ifneq (Linux,$(BUILD_SPEC))
 SRC += \
-    ucplatform/sam/serial_client.cpp       \
-    ucplatform/sam/fault_handlers.cpp      \
-    ucplatform/sam/hardfault_handler.cpp   \
+    ucplatform/drivers/samx7x/serial_client.cpp       \
+    ucplatform/drivers/samx7x/fault_handlers.cpp      \
+    ucplatform/drivers/samx7x/hardfault_handler.cpp   \
 
 INCLUDE_SAM_USB_SUPPORT := true
 

@@ -5,19 +5,19 @@ BUILD_SPEC := Linux
 FLAGS += -DENABLE_DEBUG_SEGGER_RTT_STRINGS -DENABLE_DEBUG_MSGS -D_ASSERT_ENABLE_
 
 SRC = \
-    ucplatform/hw_init.cpp          \
-    ucplatform/tick.cpp             \
-    ucplatform/config_settings.cpp  \
-    ucplatform/debug_server.cpp     \
-    ucplatform/debug_printf.cpp     \
-    ucplatform/sam/serial_client.cpp       \
-    ucplatform/rtt/RTT/SEGGER_RTT.c        \
-    ucplatform/rtt/RTT/SEGGER_RTT_printf.c \
-    ucplatform/sam/fault_handlers.cpp      \
-    ucplatform/sam/hardfault_handler.cpp   \
-    ucplatform/freertos_fault_handlers.cpp \
-    ucplatform/base_can_client.cpp  \
-    ucplatform/$(BUILD_SPEC_DIRNAME)/can_client.cpp
+    ucplatform/src/hw_init.cpp          \
+    ucplatform/src/tick.cpp             \
+    ucplatform/src/config_settings.cpp  \
+    ucplatform/src/debug_server.cpp     \
+    ucplatform/src/debug_printf.cpp     \
+    ucplatform/drivers/samx7x/serial_client.cpp       \
+    ucplatform/libs/rtt/RTT/SEGGER_RTT.c        \
+    ucplatform/libs/rtt/RTT/SEGGER_RTT_printf.c \
+    ucplatform/drivers/samx7x/fault_handlers.cpp      \
+    ucplatform/drivers/samx7x/hardfault_handler.cpp   \
+    ucplatform/src/freertos_fault_handlers.cpp \
+    ucplatform/src/base_can_client.cpp  \
+    ucplatform/drivers/$(BUILD_SPEC_DIRNAME)/can_client.cpp
 
 ifeq (Python,$(BUILD_SPEC))
 TARGET=example_app$(shell python3-config --extension-suffix)
