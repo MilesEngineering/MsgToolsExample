@@ -1,5 +1,3 @@
-all:: .prerequisites.log
-
 include embedded/ucplatform/mk/include.mk
 # codegen.mk will run the code generator for all the default languages
 include $(MK_DIR)/codegen.mk
