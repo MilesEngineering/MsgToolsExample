@@ -15,8 +15,8 @@ SRC = \
 
 ifneq (Linux,$(BUILD_SPEC))
 SRC += \
-    ucplatform/drivers/samx7x/fault_handlers.cpp      \
-    ucplatform/drivers/samx7x/hardfault_handler.cpp   \
+    ucplatform/drivers/cortexM/fault_handlers.cpp     \
+    ucplatform/drivers/cortexM/hardfault_handler.cpp   \
 
 INCLUDE_SAM_USB_SUPPORT := true
 

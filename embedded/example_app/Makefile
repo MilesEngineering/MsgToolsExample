@@ -11,8 +11,8 @@ SRC = \
     ucplatform/src/debug_printf.cpp     \
     ucplatform/libs/rtt/RTT/SEGGER_RTT.c        \
     ucplatform/libs/rtt/RTT/SEGGER_RTT_printf.c \
-    ucplatform/drivers/samx7x/fault_handlers.cpp      \
-    ucplatform/drivers/samx7x/hardfault_handler.cpp   \
+    ucplatform/drivers/cortexM/fault_handlers.cpp     \
+    ucplatform/drivers/cortexM/hardfault_handler.cpp  \
     ucplatform/src/freertos_fault_handlers.cpp
 
 ifeq (Python,$(BUILD_SPEC))

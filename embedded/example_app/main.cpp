@@ -134,11 +134,14 @@ int main (void)
     // or an infinite loop of messages will be created.
     //static CanClient* can = CanClient::Can1(&mp);
 #else
-    //static SerialClient* sc = UsartClient::Usart0(&mp);
+    #ifdef BUILD_SPEC_samx7x
     static UsbCdcClient* usb = UsbCdcClient::Instance(&mp);
     PinMode can1_rx_pin(PIO_PC12_IDX, IOPORT_MODE_MUX_C);
     PinMode can1_tx_pin(PIO_PC14_IDX, IOPORT_MODE_MUX_C);
     static CanClient* can = CanClient::Can1(&can1_rx_pin, &can1_tx_pin, &mp);
+    #else
+    //static SerialClient* sc = UsartClient::Usart0(&mp);
+    #endif
 #endif
     vTaskStartScheduler();
     return 0;
