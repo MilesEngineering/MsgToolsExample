@@ -9,9 +9,7 @@ INCLUDE_SIMULINK_SUPPORT := true
 
 SRC := \
     main.cpp                        \
-    ucplatform/hw_init.cpp          \
     ucplatform/tick.cpp             \
-    ucplatform/base_can_client.cpp  \
     ucplatform/debug_server.cpp     \
     ucplatform/debug_printf.cpp     \
     ucplatform/freertos_fault_handlers.cpp \
@@ -20,8 +18,6 @@ SRC := \
 
 ifneq (Linux,$(BUILD_SPEC))
 SRC += \
-    ucplatform/sam/serial_client.cpp     \
-    ucplatform/sam/can_client.cpp        \
     ucplatform/sam/fault_handlers.cpp 
 
 INCLUDE_SAM_USB_SUPPORT := true

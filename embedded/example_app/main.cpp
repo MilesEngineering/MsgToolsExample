@@ -13,8 +13,8 @@
 #ifdef BUILD_SPEC_Linux
 #include "Linux/network_client.h"
 #else
-#include "samx7x/serial_client.h"
-#include "samx7x/can_client.h"
+#include "serial_client.h"
+#include "can_client.h"
 #endif
 #include <inttypes.h>
 #include "debug_printf.h"

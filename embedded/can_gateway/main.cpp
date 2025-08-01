@@ -9,11 +9,10 @@
 #include "hw_init.h"
 #ifdef BUILD_SPEC_Linux
 #include "Linux/network_client.h"
-#include "Linux/can_client.h"
 #else
-#include "samx7x/serial_client.h"
-#include "samx7x/can_client.h"
+#include "serial_client.h"
 #endif
+#include "can_client.h"
 #include <inttypes.h>
 
 #define POOL_BUF_COUNT    32
