@@ -1,8 +1,9 @@
 ALL_BUILD_SPECS := Linux same70 Python riscv same54p20
-BUILD_SPEC := Linux
+BUILD_SPEC ?= Linux
 
 # switch this from ENABLE_DEBUG_SEGGER_RTT_STRINGS to ENABLE_DEBUG_SEGGER_RTT once we have PC-side support for that.
-FLAGS += -DENABLE_DEBUG_SEGGER_RTT_STRINGS -DENABLE_DEBUG_MSGS -D_ASSERT_ENABLE_
+#FLAGS += -DENABLE_DEBUG_SEGGER_RTT_STRINGS
+FLAGS += -DENABLE_DEBUG_MSGS -D_ASSERT_ENABLE_
 
 SRC = \
     ucplatform/src/tick.cpp             \

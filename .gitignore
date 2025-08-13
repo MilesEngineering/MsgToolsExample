@@ -17,3 +17,4 @@ setup/prerequisites.log
 .install_sentinel.log
 __pycache__/
 *.egg-info/
+/.vscode/

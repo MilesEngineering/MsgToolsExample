@@ -18,6 +18,7 @@
 #endif
 #include <inttypes.h>
 #include "debug_printf.h"
+#include <cstdio>
 #define ESCAPED_FILE_PATH __main
 
 // Make a pool of buffers to be used by all clients.
@@ -140,7 +141,9 @@ int main (void)
     PinMode can1_tx_pin(PIO_PC14_IDX, IOPORT_MODE_MUX_C);
     static CanClient* can = CanClient::Can1(&can1_rx_pin, &can1_tx_pin, &mp);
     #else
-    //static SerialClient* sc = UsartClient::Usart0(&mp);
+    PinMode usart0_rx_pin(PORT_PIN_PA04, PERIPHERAL_FUNCTION_D);
+    PinMode usart0_tx_pin(PORT_PIN_PA05, PERIPHERAL_FUNCTION_D);
+    static UsartClient uc = UsartClient(USART0, usart0_rx_pin, usart0_tx_pin, mp);
     #endif
 #endif
     vTaskStartScheduler();

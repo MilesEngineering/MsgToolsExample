@@ -3,7 +3,8 @@ BUILD_SPEC := same70
 
 # output debug info as strings on RTT and stdout.
 # this isn't that efficient, but doesn't require a debug dictionary.
-FLAGS += -DENABLE_DEBUG_SEGGER_RTT_STRINGS -DENABLE_DEBUG_STDOUT -D_ASSERT_ENABLE_
+#FLAGS += -DENABLE_DEBUG_SEGGER_RTT_STRINGS 
+FLAGS += -DENABLE_DEBUG_STDOUT -D_ASSERT_ENABLE_
 
 SRC = \
     main.cpp                               \

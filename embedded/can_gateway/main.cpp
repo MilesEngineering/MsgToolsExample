@@ -14,6 +14,7 @@
 #endif
 #include "can_client.h"
 #include <inttypes.h>
+#include <cstdio>
 
 #define POOL_BUF_COUNT    32
 
@@ -40,11 +41,15 @@ int main (void)
 #ifdef BUILD_SPEC_Linux
     static NetworkClient nc(mp);
 #else
+#ifdef BUILD_SPEC_samx7x
     static UsbCdcClient* usb = UsbCdcClient::Instance(&mp);
-#endif
     static PinMode can1_rx_pin(PIO_PC12_IDX, IOPORT_MODE_MUX_C);
     static PinMode can1_tx_pin(PIO_PC14_IDX, IOPORT_MODE_MUX_C);
     [[maybe_unused]] static CanClient* can1 = CanClient::Can1(&can1_rx_pin, &can1_tx_pin, &mp);
+#else // BUILD_SPEC_samx7x
+#endif // BUILD_SPEC_samx7x
+#endif
+    
 
     vTaskStartScheduler();
     return 0;
