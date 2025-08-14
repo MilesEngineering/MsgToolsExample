@@ -3,7 +3,7 @@ BUILD_SPEC ?= Linux
 
 # switch this from ENABLE_DEBUG_SEGGER_RTT_STRINGS to ENABLE_DEBUG_SEGGER_RTT once we have PC-side support for that.
 #FLAGS += -DENABLE_DEBUG_SEGGER_RTT_STRINGS
-FLAGS += -DENABLE_DEBUG_MSGS -D_ASSERT_ENABLE_
+FLAGS += -DENABLE_DEBUG_MSGS -D_ASSERT_ENABLE_ -DENABLE_DEBUG_STDOUT
 
 SRC = \
     ucplatform/src/tick.cpp             \

@@ -37,7 +37,11 @@ class TestClient1 : public DebugServer
 {
     public:
         TestClient1(MessagePool& pool)
+#ifdef ENABLE_DEBUG_STDOUT        
+        : DebugServer("ExampleApp", "tc1", &pool, 500, DEFAULT_PRIORITY, 1024)
+#else // ENABLE_DEBUG_STDOUT
         : DebugServer("ExampleApp", "tc1", &pool, 500)
+#endif // ENABLE_DEBUG_STDOUT
         {
             Subscribe(MessageKey(TestCase4Message::MSG_ID));
             Subscribe(MessageKey(TestCase2Message::MSG_ID));
@@ -69,7 +73,11 @@ class TestClient2 : public MessageClient
 {
     public:
         TestClient2(MessagePool& pool, TestClient1& tc1)
+#if ENABLE_DEBUG_STDOUT        
+        : MessageClient("tc2", &pool, 1000, DEFAULT_PRIORITY, 1024),
+#else // ENABLE_DEBUG_STDOUT
         : MessageClient("tc2", &pool, 1000),
+#endif // ENABLE_DEBUG_STDOUT
           m_tc1(tc1)
         {
             Subscribe(TestCase4Message::MSG_ID);
@@ -80,7 +88,7 @@ class TestClient2 : public MessageClient
             switch(msg.GetMessageID())
             {
                 case TestCase4Message::MSG_ID:
-                    debugPrintf("TC2 got TestCase4 Message  at time %d\n", (int)GetTickCount());
+                    debugPrintf("TC2 got TestCase4 Message at time %d\n", (int)GetTickCount());
                     break;
                 default:
                     debugPrintf("TC2 got %d at time %d\n", (int)msg.GetMessageID(), (int)GetTickCount());
@@ -144,6 +152,12 @@ int main (void)
     PinMode usart0_rx_pin(PORT_PIN_PA04, PERIPHERAL_FUNCTION_D);
     PinMode usart0_tx_pin(PORT_PIN_PA05, PERIPHERAL_FUNCTION_D);
     static UsartClient uc = UsartClient(USART0, usart0_rx_pin, usart0_tx_pin, mp);
+
+#ifdef ENABLE_DEBUG_STDOUT
+    PinMode usart2_rx_pin(PORT_PIN_PB24, PERIPHERAL_FUNCTION_D);
+    PinMode usart2_tx_pin(PORT_PIN_PB25, PERIPHERAL_FUNCTION_D);
+    HWInit::configure_serial_console(USART2, usart2_rx_pin, usart2_tx_pin);
+#endif // ENABLE_DEBUG_STDOUT
     #endif
 #endif
     vTaskStartScheduler();
