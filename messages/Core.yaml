@@ -213,6 +213,7 @@ Messages:
         Enum: Priorities
   - Name: LowLevelFaults
     ID: 0x107
+    Alias: LowLevelFaults
     Description: Used to cause errors, for testing
     Fields:
       - Name: Key
@@ -225,6 +226,7 @@ Messages:
   - Name: GetResetInfo
     ID: 0x108
     Description: Request for information about the last reset.
+    Alias: GetResetInfo
     Fields:
       - Name: ClearResetInfo
         Type: uint8
@@ -232,6 +234,7 @@ Messages:
   - Name: ResetInfo
     ID: 0x109
     Description: Information about the last reset.
+    Alias: ResetInfo
     Fields:
       - Name: LastReset
         Type: uint16

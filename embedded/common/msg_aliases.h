@@ -3,26 +3,31 @@
 
 #include "Core.h"
 
-#define PrintfMessage               Core_PrintfMessage
-#define PrintfIDMessage             Core_PrintfIDMessage
-#define SetDebugThresholdMessage    Core_SetDebugThresholdMessage
-#define GetThreadInfoMessage        Core_GetThreadInfoMessage
-#define ThreadInfoMessage           Core_ThreadInfoMessage
-#define GetDeviceInfoMessage        Core_GetDeviceInfoMessage
-#define DeviceInfoMessage           Core_DeviceInfoMessage
-#define LowLevelFaultsMessage       Core_LowLevelFaultsMessage
-#define GetResetInfoMessage         Core_GetResetInfoMessage
-#define ResetInfoMessage            Core_ResetInfoMessage
-#define ClearConfigSettingsMessage  Core_ClearConfigSettingsMessage
+/* You need to #include msgtools generated header files that define the following messages,
+   or messages with the following Aliases:
+    DebugPrintf
+    DebugPrintfID
+    SetDebugThreshold
+    GetStreamDebugInfo
+    DebugStreamInfo
+    DebugDeviceInfo
+    GetResetInfo
+    ResetInfo
+    LowLevelFaults
+    GetDeviceDebugInfo
+*/
 
-/* These don't exist in the example app, and the code in ucplatform that uses them is protected by ifdefs.
-
-#define GetConfigKeysMessage        AppExample_GetConfigKeysMessage
-#define GetConfigValueMessage       AppExample_GetConfigValueMessage
-#define SetConfigValueMessage       AppExample_SetConfigValueMessage
-#define DeleteConfigValueMessage    AppExample_DeleteConfigValueMessage
-#define CurrentConfigKeysMessage    AppExample_CurrentConfigKeysMessage
-#define CurrentConfigValueMessage   AppExample_CurrentConfigValueMessage
+/* Configuration settings functionality is enabled by defining messages with the following
+   Aliases.  The code is protected by #ifdef, so if you don't define these aliases the
+   functionality is disabled.  Because ifdef checks are used, you must define these as
+   aliases and not just as regular message names:
+    ClearConfigSettings
+    GetConfigKeysMessage
+    GetConfigValueMessage
+    SetConfigValueMessage
+    DeleteConfigValueMessage
+    CurrentConfigKeysMessage
+    CurrentConfigValueMessage
 */
 
 #define CORE_INTERFACE_ID        MESSAGES_CORE_FILE_HASH
